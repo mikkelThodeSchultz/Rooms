@@ -12,44 +12,45 @@ public class Adventure {
         boolean goAgain = true;
         Map map = new Map();
         map.createMap();
+        Player player = new Player("Brooow");
 
 
         while (goAgain) {
             String userInput = sc.nextLine();
             if (Objects.equals(userInput, "go north") || Objects.equals(userInput, "n")|| Objects.equals(userInput, "north")) {
-                if (map.currentRoom.getNorth() != null) {
-                    map.currentRoom = map.currentRoom.getNorth();
-                    System.out.println("you are in " + map.currentRoom.getName() + map.currentRoom.getDescription());
+                if (player.playerRoom.getNorth() != null) {
+                    player.playerRoom = player.playerRoom.getNorth();
+                    System.out.println("you are in " + player.playerRoom.getName() + player.playerRoom.getDescription());
                 }
                 else System.out.println("there is no door"); }
 
             else if (Objects.equals(userInput, "go east") || Objects.equals(userInput, "e")|| Objects.equals(userInput, "east")) {
-                if (map.currentRoom.getEast() != null) {
-                    map.currentRoom = map.currentRoom.getEast();
-                    System.out.println("you are in " + map.currentRoom.getName() + map.currentRoom.getDescription());
+                if (player.playerRoom.getEast() != null) {
+                    player.playerRoom = player.playerRoom.getEast();
+                    System.out.println("you are in " + player.playerRoom.getName() + player.playerRoom.getDescription());
                 }
                 else System.out.println("there is no door");
             }
 
             else if (Objects.equals(userInput, "go south") || Objects.equals(userInput, "s")|| Objects.equals(userInput, "south")) {
-                if (map.currentRoom.getSouth() != null) {
-                    map.currentRoom = map.currentRoom.getSouth();
-                    System.out.println("you are in " + map.currentRoom.getName() + map.currentRoom.getDescription());
+                if (player.playerRoom.getSouth() != null) {
+                    player.playerRoom = player.playerRoom.getSouth();
+                    System.out.println("you are in " + player.playerRoom.getName() + player.playerRoom.getDescription());
                 }
                 else System.out.println("there is no door");
             }
 
             else if (Objects.equals(userInput, "go west") || Objects.equals(userInput, "w")|| Objects.equals(userInput, "west")) {
-                if (map.currentRoom.getWest() != null) {
-                    map.currentRoom = map.currentRoom.getWest();
-                    System.out.println("you are in " + map.currentRoom.getName() + map.currentRoom.getDescription());
+                if (player.playerRoom.getWest() != null) {
+                    player.playerRoom = player.playerRoom.getWest();
+                    System.out.println("you are in " + player.playerRoom.getName() + player.playerRoom.getDescription());
                 }
                 else System.out.println("there is no door");
             }
 
             else if (Objects.equals(userInput, "look")){
                 System.out.println("looking around");
-                System.out.println("you are in " + map.currentRoom.getName() + map.currentRoom.getDescription());
+                System.out.println("you are in " + player.playerRoom.getName() + player.playerRoom.getDescription());
 
             }
 
