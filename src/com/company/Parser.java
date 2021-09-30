@@ -15,9 +15,7 @@ public class Parser {
 
     public void runGame() {
 
-        player.addItem(new Item("bukser"));
-        player.addItem(new Item("trøje"));
-        player.addItem(new Item("sko"));
+
 
         System.out.println("You come to your senses... " +
                 "\nYour head feels as if you have been hit with a mallet. " +
@@ -29,35 +27,38 @@ public class Parser {
 
         while (goAgain) {
             String userInput = sc.nextLine();
+            userInput.toLowerCase().trim();
+
+
             if (Objects.equals(userInput, "go north") || Objects.equals(userInput, "n") || Objects.equals(userInput, "north")) {
-                if (player.playerRoom.getNorth() != null) {
-                    player.playerRoom = player.playerRoom.getNorth();
-                    System.out.println("You move north. You are now in the " + player.playerRoom.getName() + ". " + player.playerRoom.getDescription() + "" +
-                              player.playerRoom.getItems());
+                if (player.currentRoom.getNorth() != null) {
+                    player.currentRoom = player.currentRoom.getNorth();
+                    System.out.println("You move north. You are now in the " + player.currentRoom.getName() + ". " + player.currentRoom.getDescription() + "" +
+                              player.currentRoom.getItems());
                 } else System.out.println("there is no door");
             } else if (Objects.equals(userInput, "go east") || Objects.equals(userInput, "e") || Objects.equals(userInput, "east")) {
-                if (player.playerRoom.getEast() != null) {
-                    player.playerRoom = player.playerRoom.getEast();
-                    System.out.println("You move east. You are now in the " + player.playerRoom.getName() + ". " + player.playerRoom.getDescription() + "" +
-                            player.playerRoom.getItems());
+                if (player.currentRoom.getEast() != null) {
+                    player.currentRoom = player.currentRoom.getEast();
+                    System.out.println("You move east. You are now in the " + player.currentRoom.getName() + ". " + player.currentRoom.getDescription() + "" +
+                            player.currentRoom.getItems());
                 } else System.out.println("there is no door");
             } else if (Objects.equals(userInput, "go south") || Objects.equals(userInput, "s") || Objects.equals(userInput, "south")) {
-                if (player.playerRoom.getSouth() != null) {
-                    player.playerRoom = player.playerRoom.getSouth();
-                    System.out.println("You move south. You are now in the " + player.playerRoom.getName() + ". " + player.playerRoom.getDescription() + "" +
-                            player.playerRoom.getItems());
+                if (player.currentRoom.getSouth() != null) {
+                    player.currentRoom = player.currentRoom.getSouth();
+                    System.out.println("You move south. You are now in the " + player.currentRoom.getName() + ". " + player.currentRoom.getDescription() + "" +
+                            player.currentRoom.getItems());
                 } else System.out.println("there is no door");
             } else if (Objects.equals(userInput, "go west") || Objects.equals(userInput, "w") || Objects.equals(userInput, "west")) {
-                if (player.playerRoom.getWest() != null) {
-                    player.playerRoom = player.playerRoom.getWest();
-                    System.out.println("You move west. You are now in the " + player.playerRoom.getName() + ". " + player.playerRoom.getDescription() + "" +
-                            player.playerRoom.getItems());
+                if (player.currentRoom.getWest() != null) {
+                    player.currentRoom = player.currentRoom.getWest();
+                    System.out.println("You move west. You are now in the " + player.currentRoom.getName() + ". " + player.currentRoom.getDescription() + "" +
+                            player.currentRoom.getItems());
                 } else System.out.println("there is no door");
             } else if (Objects.equals(userInput, "look")) {
                 System.out.println("You take a look at your surroundings.");
-                System.out.println("You are in the" + player.playerRoom.getName() + ". " + player.playerRoom.getDescription());
+                System.out.println("You are in the" + player.currentRoom.getName() + ". " + player.currentRoom.getDescription());
 
-                        ArrayList<Item> temp = player.playerRoom.getItems2();
+                        ArrayList<Item> temp = player.currentRoom.getItems2();
                 printItems(temp);
 
             }else if (Objects.equals(userInput, "inventory")) {

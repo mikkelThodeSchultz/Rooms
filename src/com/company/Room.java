@@ -13,8 +13,6 @@ public class Room {
     private Room west;
 
 
-
-
     public void addItem (Item item){
         roomItems.add(item);
     }
