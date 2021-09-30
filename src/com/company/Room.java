@@ -1,9 +1,12 @@
 package com.company;
 
 
+import java.util.ArrayList;
+
 public class Room {
     private String name;
     private String description;
+    private ArrayList<Item> roomItems = new ArrayList<>();
     private Room north;
     private Room east;
     private Room south;
@@ -11,6 +14,35 @@ public class Room {
 
 
 
+
+    public void addItem (Item item){
+        roomItems.add(item);
+    }
+
+    public String getItems(){
+
+        String result = "\nYou see ";
+        for (int i = 0; i < roomItems.size(); i++) {
+
+            if (i == roomItems.size()-1) {
+                result += roomItems.get(i).getItemName() + ".";
+            } else if (i == roomItems.size()-2){
+                result += roomItems.get(i).getItemName()+" and ";
+            } else {
+                result += roomItems.get(i).getItemName() + ", ";
+            }
+
+        }
+        if (result.equals("\nYou see ")){
+            result += "nothing of interest.";
+        }
+
+        return result;
+    }
+    public ArrayList<Item> getItems2(){
+
+        return roomItems;
+    }
 
     public Room (String name, String description){
         this.name = name;

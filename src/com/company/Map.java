@@ -23,7 +23,13 @@ public class Map {
         room6.setSouth(room9);
         room7.setEast(room8);
         room8.setEast(room9);
+        room1.addItem(new Item ("a sword"));
+        room1.addItem(new Item ("an axe"));
+        room1.addItem(new Item ("a spear"));
+        room2.addItem(new Item ("a shortsword"));
+        room3.addItem(new Item ("a lygtepæl"));
+        room4.addItem(new Item ("a halberd"));
+        room5.addItem(new Item ("a mace"));
 
     }
-
 }
