@@ -1,19 +1,17 @@
 package com.company;
 
 import java.util.Scanner;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Game {
 
     Scanner sc = new Scanner(System.in);
     boolean goAgain = true;
-    Player player = new Player("pede");
+
 
 
     public void runGame() {
-
+    Player player = new Player("Thor");
         System.out.println("You come to your senses... " +
                 "\nYour head feels as if you have been hit with a mallet. " +
                 "\nAs your eyes adjust to the surroundings, you realize that may just be the case. " +
@@ -25,34 +23,85 @@ public class Game {
         while (goAgain) {
             String userInput = sc.nextLine();
             userInput.toLowerCase().trim();
-            String command = userInput.substring(0,1);
-
-            if (command.equals("n") || command.equals("e")  || command.equals("s") || command.equals("w")){
-                player.move(command);
-                if (player.getCurrentRoom() == (null)){
-                    System.out.println("there is no door");
-                }else System.out.println("You move to " + player.getCurrentRoom() + " " + player.getCurrentRoom().getDescription() + " " +
-                        player.getCurrentRoom().getItems2());
-            }
+            String command = userInput.substring(0,1);//TODO piletasterne får programmet til at crashe her.
 
             switch (command) {
+                case "n":
+                case "e":
+                case "s":
+                case "w":
+                    move(command, player);
+                    break;
 
-                case "i" : //TODO INVENTORY
+                case "i" :
+                    player.getInventory();
                     break;
-                case "q" : //TODO QUIT GAME
+
+                case "q" :
+                    goAgain = false;
                     break;
-                case "h" : //TODO HELP
+
+                case "h" : helpInfo();
                     break;
-                case "p" : //TODO PUT ITEM
+                case "d" : //TODO PUT ITEM - drop
                     break;
                 case "t" : //TODO TAKE ITEM
                     break;
-                case "l" : //TODO LOOK
+                case "l" : lookAround(player);
                     break;
-                default: // TODO "Your input was not correct, try again"
+                default:
+                    System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
 
 
             }
         }
     }
+
+    private void lookAround(Player player) {
+        System.out.println("You take a look at your surroundings...");
+        System.out.println("You are in the" + player.getCurrentRoom().getName() + ". " + player.getCurrentRoom().getDescription());
+        ArrayList<Item> temp = player.getCurrentRoom().getItems2();
+        printItems(temp);
+    }
+
+    private void helpInfo() {
+        System.out.println("There is little help to be found here." +
+                "\nType 'look' to get a description of your current room. " +
+                "\nType '(n)orth', '(e)ast', '(s)outh', or '(w)est' to move in one of the cardinal directions." +
+                "\nType 'take' + the item you want to pick up."+
+                "\nType 'drop' + the item you want to drop."+
+                "\nType 'inventory' to look at what you are carrying."+
+                "\nType 'quit' to quit the game.");
+
+    }
+
+    private void printItems(ArrayList<Item> roomItems) {
+
+        String result = "\nYou see ";
+        for (int i = 0; i < roomItems.size(); i++) {
+
+            if (i == roomItems.size()-1) {
+                result += roomItems.get(i).getItemName() + ".";
+            } else if (i == roomItems.size()-2){
+                result += roomItems.get(i).getItemName()+" and ";
+            } else {
+                result += roomItems.get(i).getItemName() + ", ";
+            }
+
+        }
+        if (result.equals("\nYou see ")){
+            result += "nothing of interest.";
+        }
+        System.out.println(result);
+    }
+
+    private void move(String command, Player player) {
+        if (command.equals("n") || command.equals("e")  || command.equals("s") || command.equals("w")){
+            if (player.move(command) == false){
+                System.out.println("You can't go that way.");
+            }else {System.out.println("You move to " + player.getCurrentRoom().getName() + " " + player.getCurrentRoom().getDescription());
+                ArrayList<Item> temp = player.getCurrentRoom().getItems2();
+                    printItems(temp);}
+    }
+}
 }

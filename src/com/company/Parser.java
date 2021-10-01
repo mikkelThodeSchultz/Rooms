@@ -1,3 +1,4 @@
+/*
 package com.company;
 
 import java.lang.reflect.Array;
@@ -98,3 +99,4 @@ public class Parser {
         System.out.println(result);
     }
 }
+*/

@@ -7,6 +7,7 @@ public class Room {
     private String name;
     private String description;
     private ArrayList<Item> roomItems = new ArrayList<>();
+    private String roomHelp;
     private Room north;
     private Room east;
     private Room south;
@@ -101,5 +102,13 @@ public class Room {
     }
     public String getName(){
         return name;
+    }
+
+    public String getRoomHelp() {
+        return roomHelp;
+    }
+
+    public void setRoomHelp(String roomHelp) {
+        this.roomHelp = roomHelp;
     }
 }
