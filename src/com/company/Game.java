@@ -21,15 +21,18 @@ public class Game {
                 "\n(Type 'help' for a list of available commands)");
 
         while (goAgain) {
-            String userInput = sc.nextLine().toLowerCase().trim()+"zzzzzzzz";
-            if (userInput.substring(0,7).equals("pick up")){
-                pickUp(userInput.substring(8));
+            String userInput = sc.nextLine().toLowerCase().trim();
+            String command = userInput;
+            if (command.startsWith("pick up")){
+                String item = command.substring(8);
+                pickUp(item, player);
             }
+            if (command.startsWith("drop")){
+                String item = command.substring(5);
+                drop(item, player);
+            }
+            command = parser(userInput);
 
-                else { String command = parser(userInput);}
-
-
-            //String command = userInput.substring(0,1);//TODO piletasterne får programmet til at crashe her.
 
             switch (command) {
                 case "n":
@@ -40,18 +43,17 @@ public class Game {
                     break;
 
                 case "i" :
-                    player.getInventory();
+                    printInventory(player.getInventory());
                     break;
-
                 case "q" :
                     goAgain = false;
                     break;
 
                 case "h" : helpInfo();
                     break;
-                case "d" : //TODO PUT ITEM - drop
+                case "d" : // er tom fordi ellers printer den default.
                     break;
-                case "t" : //TODO TAKE ITEM
+                case "p" : // er tom fordi ellers printer den default.
                     break;
                 case "l" : lookAround(player);
                     break;
@@ -63,22 +65,57 @@ public class Game {
         }
     }
 
-    private void pickUp(String substring) {//TODO work out how this should work :P
-        String currentItem = substring;
-        ArrayList<Item> getItems2();
-        for (int i = 0; i < ; i++) {
-            if (currentItem.equals(roomItems.get(i).getItemName)){
-                remove.roomItems.get(i)
+    private void printInventory (ArrayList<Item> inventory){
+        String result = "\nYou are carrying ";
+        for (int i = 0; i < inventory.size(); i++) {
 
+            if (i == inventory.size()-1) {
+                result += inventory.get(i).getItemName() + ".";
+            } else if (i == inventory.size()-2){
+                result += inventory.get(i).getItemName()+" and ";
+            } else {
+                result += inventory.get(i).getItemName() + ", ";
+            }
+
+        }
+        if (result.equals("\nYou are carrying ")){
+            result += "nothing.";
+        }
+        System.out.println(result);
+    }
+
+    private void drop (String substring, Player player) {
+        String currentItem = substring;
+        ArrayList<Item> tempRoomItems = player.getCurrentRoom().getItems();
+        ArrayList<Item> tempInventory = player.getInventory();
+        for (int i = 0; i < tempInventory.size(); i++) {
+            if (currentItem.equals(tempInventory.get(i).getItemName())) {
+                tempRoomItems.add(new Item(tempInventory.get(i).getItemName()));
+                System.out.println("You drop " + tempInventory.get(i).getItemName() + " well done.");
+                tempInventory.remove(i);
             }
         }
     }
 
+    private void pickUp(String substring, Player player) {
+        String currentItem = substring;
+        ArrayList<Item> tempInventory = player.getInventory();
+        ArrayList<Item> tempItems = player.getCurrentRoom().getItems();
+        for (int i = 0; i < tempItems.size(); i++) {
+            if (currentItem.equals(tempItems.get(i).getItemName())) {
+                tempInventory.add(new Item(tempItems.get(i).getItemName()));
+                System.out.println("You pick up " + tempItems.get(i).getItemName() + " well done.");
+                tempItems.remove(i);
+            }
+        }
+    }
+
+
     private void lookAround(Player player) {
         System.out.println("You take a look at your surroundings...");
         System.out.println("You are in the" + player.getCurrentRoom().getName() + ". " + player.getCurrentRoom().getDescription());
-        ArrayList<Item> temp = player.getCurrentRoom().getItems2();
-        printItems(temp);
+        ArrayList<Item> tempItems = player.getCurrentRoom().getItems();
+        printItems(tempItems);
     }
 
     private void helpInfo() {
@@ -117,33 +154,26 @@ public class Game {
             if (player.move(command) == false){
                 System.out.println("You can't go that way.");
             }else {System.out.println("You move to the " + player.getCurrentRoom().getName() + ". " + player.getCurrentRoom().getDescription());
-                ArrayList<Item> temp = player.getCurrentRoom().getItems2();
+                ArrayList<Item> temp = player.getCurrentRoom().getItems();
                     printItems(temp);}
     }
 }
 
-    private String parser(String input){
+    private String parser (String input){
 
-        String command = input+"zzzzzzzzzz";
+        String command = input + "zzzzzzzzzz"; // workaround, de 10 z'er
 
-        if (command.substring(0,3).equals("go ")){
+        if (command.startsWith("go ")){
             command = command.substring(3,4);
         }
-        else if (command.substring(0,4).equals("exit")){
+        else if (command.startsWith("exit")){
             command = "q";
+
         }
-        else if (command.substring(0,7).equals("pick up")){
-            command = command.substring(8);
-            //TODO metode til at håndtere identificering af ting man samler op.
-        }
-        else if (command.substring(0,4).equals("drop")){
-            command = command.substring(5);
-            //TODO metode til at identificere ting man vil smide.
-        }
-        else if (command.substring(0,1).equals(null)){
-            command = null;
-        } else
-            command = command.substring(0,1);
+
+        else
+            command = command.substring(0, 1);
+
 
         return command;
     }

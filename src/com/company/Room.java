@@ -18,27 +18,7 @@ public class Room {
         roomItems.add(item);
     }
 
-    public String getItems(){
-
-        String result = "\nYou see ";
-        for (int i = 0; i < roomItems.size(); i++) {
-
-            if (i == roomItems.size()-1) {
-                result += roomItems.get(i).getItemName() + ".";
-            } else if (i == roomItems.size()-2){
-                result += roomItems.get(i).getItemName()+" and ";
-            } else {
-                result += roomItems.get(i).getItemName() + ", ";
-            }
-
-        }
-        if (result.equals("\nYou see ")){
-            result += "nothing of interest.";
-        }
-
-        return result;
-    }
-    public ArrayList<Item> getItems2(){
+    public ArrayList<Item> getItems(){
 
         return roomItems;
     }

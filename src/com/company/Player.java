@@ -13,6 +13,8 @@ public class Player {
         this.name = name;
         currentRoom = map.room1;
         map.createMap();
+
+        inventory.add(new Item ("bukser"));
     }
 
     public Room getCurrentRoom() {
@@ -20,6 +22,7 @@ public class Player {
     }
 
     public ArrayList<Item> getInventory() {
+
         return inventory;
     }
 

@@ -7,7 +7,5 @@ public class Adventure {
         Game game = new Game();
         game.runGame();
 
-
-
     }
 }
