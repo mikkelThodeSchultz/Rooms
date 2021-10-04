@@ -21,9 +21,14 @@ public class Game {
                 "\n(Type 'help' for a list of available commands)");
 
         while (goAgain) {
-            String userInput = sc.nextLine().toLowerCase().replaceAll("//s","");
+            String userInput = sc.nextLine().toLowerCase().trim()+"zzzzzzzz";
+            if (userInput.substring(0,7).equals("pick up")){
+                pickUp(userInput.substring(8));
+            }
 
-            String command = parser(userInput);
+                else { String command = parser(userInput);}
+
+
             //String command = userInput.substring(0,1);//TODO piletasterne får programmet til at crashe her.
 
             switch (command) {
@@ -53,6 +58,17 @@ public class Game {
                 default:
                     System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
 
+
+            }
+        }
+    }
+
+    private void pickUp(String substring) {//TODO work out how this should work :P
+        String currentItem = substring;
+        ArrayList<Item> getItems2();
+        for (int i = 0; i < ; i++) {
+            if (currentItem.equals(roomItems.get(i).getItemName)){
+                remove.roomItems.get(i)
 
             }
         }
@@ -100,7 +116,7 @@ public class Game {
         if (command.equals("n") || command.equals("e")  || command.equals("s") || command.equals("w")){
             if (player.move(command) == false){
                 System.out.println("You can't go that way.");
-            }else {System.out.println("You move to " + player.getCurrentRoom().getName() + " " + player.getCurrentRoom().getDescription());
+            }else {System.out.println("You move to the " + player.getCurrentRoom().getName() + ". " + player.getCurrentRoom().getDescription());
                 ArrayList<Item> temp = player.getCurrentRoom().getItems2();
                     printItems(temp);}
     }
