@@ -21,6 +21,7 @@ public class Game {
                 "\n(Type 'help' for a list of available commands)");
 
         while (goAgain) {
+
             String userInput = sc.nextLine().toLowerCase().trim();
             String command = userInput;
             if (command.startsWith("pick up")){

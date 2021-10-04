@@ -14,7 +14,8 @@ public class Player {
         currentRoom = map.room1;
         map.createMap();
 
-        inventory.add(new Item ("bukser"));
+        inventory.add(new Item ("pants"));
+        inventory.add(new Item ("shirt"));
     }
 
     public Room getCurrentRoom() {
