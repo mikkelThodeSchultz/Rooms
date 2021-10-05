@@ -82,12 +82,13 @@ public class Game {
     }
 
     private void drop(String substring, Player player) {
-        String currentItem = substring;
+        String itemName = substring;
         ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
         ArrayList<Item> playerInventory = player.getInventory();
         for (int i = 0; i < playerInventory.size(); i++) {
-            if (currentItem.equals(playerInventory.get(i).getItemName())) {
-                itemsRoom.add(new Item(playerInventory.get(i).getItemName()));
+            if (itemName.equals(playerInventory.get(i).getItemName())) {
+                itemsRoom.add(new Item(playerInventory.get(i).getItemName(), playerInventory.get(i).getItemDescription(),
+                        playerInventory.get(i).getItemWeight()));
                 System.out.println("You dropped " + playerInventory.get(i).getItemName() + " in the " + player.getCurrentRoom().getName());
                 playerInventory.remove(i);
             }
@@ -101,7 +102,8 @@ public class Game {
         if (playerCarryCapacity == true) {
             for (int i = 0; i < itemsRoom.size(); i++) {
                 if (currentItem.equals(itemsRoom.get(i).getItemName())) {
-                    playerInventory.add(new Item(itemsRoom.get(i).getItemName()));
+                    playerInventory.add(new Item(itemsRoom.get(i).getItemName(), itemsRoom.get(i).getItemDescription(),
+                            itemsRoom.get(i).getItemWeight()));
                     System.out.println("You picked up " + itemsRoom.get(i).getItemName());
                     itemsRoom.remove(i);
                     player.getPlayerCarryCapacity();
