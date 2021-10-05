@@ -19,6 +19,7 @@ public class Game {
                            "\nFast." +
                            "\n(Type 'help' for a list of available commands)" +
                            "\n\nYou are currently in the Chute room. " + player.getCurrentRoom().getDescription() + ".");
+                            player.getCurrentRoom().enteredRoom();
 
         while (goAgain) {
 
@@ -153,8 +154,11 @@ public class Game {
             if (!player.move(command)) {
                 System.out.println("You can't go that way.");
             } else {
-                System.out.println("You move to the " + player.getCurrentRoom().getName() + ". "
-                                   + player.getCurrentRoom().getDescription() + ".");
+                player.getCurrentRoom().enteredRoom();
+                System.out.println("You move to the " + player.getCurrentRoom().getName() + ". ");
+                    if (player.getCurrentRoom().getRoomCounter() <= 1) {
+                        System.out.println(player.getCurrentRoom().getDescription() + ".");
+                    }
                 ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
                 printItems(itemsRoom);
             }

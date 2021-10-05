@@ -7,6 +7,7 @@ public class Room {
     private String name;
     private String description;
     private ArrayList<Item> roomItems = new ArrayList<>();
+    private int roomCounter;
     private String roomHelp;
     private Room north;
     private Room east;
@@ -17,6 +18,7 @@ public class Room {
     public Room (String name, String description){
         this.name = name;
         this.description = description;
+        this.roomCounter = 0;
     }
     public void setNorth (Room north){
         if (this.north == north){
@@ -82,5 +84,12 @@ public class Room {
     }
     public void setRoomHelp(String roomHelp) {
         this.roomHelp = roomHelp;
+    }
+
+    public int getRoomCounter() {
+        return roomCounter;
+    }
+    public void enteredRoom(){
+        roomCounter ++;
     }
 }
