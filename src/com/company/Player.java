@@ -27,16 +27,22 @@ public class Player {
         return inventory;
     }
 
-    public boolean getPlayerCarryCapacity () {//Work in progress, currently not working as intended (read: at all).
-        boolean amICarryingTooMuch = true;
+    public boolean canCarry(Item item) {
+        int resultingWeight = getCumulatedWeight() + item.getItemWeight();
+
+        if( resultingWeight > playerCarryCapacity ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public int getCumulatedWeight() {
         int cumulatedWeight = 0;
         for (int i = 0; i < inventory.size(); i++) {
             cumulatedWeight += inventory.get(i).getItemWeight();
-            if (cumulatedWeight > playerCarryCapacity) {
-                amICarryingTooMuch = false;
-            }
         }
-        return amICarryingTooMuch;
+        return cumulatedWeight;
     }
 
     public boolean move (String command) {
