@@ -6,6 +6,7 @@ public class Player {
     private String name;
     private Room currentRoom;
     private ArrayList<Item> inventory = new ArrayList<>();
+    public int playerCarryCapacity = 10;//Work in progress, currently not working as intended (read: at all).
 
     Map map = new Map();
 
@@ -23,11 +24,22 @@ public class Player {
     }
 
     public ArrayList<Item> getInventory() {
-
         return inventory;
     }
 
-    public boolean move(String command) {
+    public boolean getPlayerCarryCapacity () {//Work in progress, currently not working as intended (read: at all).
+        boolean amICarryingTooMuch = true;
+        int cumulatedWeight = 0;
+        for (int i = 0; i < inventory.size(); i++) {
+            cumulatedWeight += inventory.get(i).getItemWeight();
+            if (cumulatedWeight > playerCarryCapacity) {
+                amICarryingTooMuch = false;
+            }
+        }
+        return amICarryingTooMuch;
+    }
+
+    public boolean move (String command) {
         boolean didIWalk = true;
         if (command.equals("n")) {
             if (currentRoom.getNorth() != null) {
@@ -36,8 +48,7 @@ public class Player {
             } else {
                 didIWalk = false;
             }
-        }
-        else if (command.equals("e")) {
+        } else if (command.equals("e")) {
             if (currentRoom.getEast() != null) {
                 currentRoom = currentRoom.getEast();
                 didIWalk = true;
@@ -52,19 +63,15 @@ public class Player {
             } else {
                 didIWalk = false;
             }
-        }
-        else if (command.equals("s")) {
+        } else if (command.equals("s")) {
             if (currentRoom.getSouth() != null) {
                 currentRoom = currentRoom.getSouth();
                 didIWalk = true;
             } else {
                 didIWalk = false;
             }
-        }
-        return didIWalk;
+        } return didIWalk;
     }
-
-
 }
 
 

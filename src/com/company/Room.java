@@ -14,15 +14,6 @@ public class Room {
     private Room west;
 
 
-    public void addItem (Item item){
-        roomItems.add(item);
-    }
-
-    public ArrayList<Item> getItems(){
-
-        return roomItems;
-    }
-
     public Room (String name, String description){
         this.name = name;
         this.description = description;
@@ -30,18 +21,15 @@ public class Room {
     public void setNorth (Room north){
         if (this.north == north){
             return;
-        }
-        if (north != null){
+        } if (north != null){
             this.north = north;
             north.setSouth(this);
         }
-
     }
     public void setEast (Room east){
         if (this.east == east){
             return;
-        }
-        if (east != null){
+        } if (east != null){
             this.east = east;
             east.setWest(this);
         }
@@ -49,8 +37,7 @@ public class Room {
     public void setSouth (Room south) {
         if (this.south == south) {
             return;
-        }
-        if (south != null) {
+        } if (south != null) {
             this.south = south;
             south.setNorth(this);
         }
@@ -58,16 +45,12 @@ public class Room {
     public void setWest (Room west) {
         if (this.west == west) {
             return;
-        }
-        if (west != null) {
+        } if (west != null) {
             this.west = west;
             west.setEast(this);
         }
     }
 
-    public String getDescription(){
-        return description;
-    }
     public Room getNorth(){
         return north;
     }
@@ -83,11 +66,20 @@ public class Room {
     public String getName(){
         return name;
     }
+    public String getDescription(){
+        return description;
+    }
+    public void addItem (Item item){
+        roomItems.add(item);
+    }
+    public ArrayList<Item> getItems(){
+        return roomItems;
+    }
 
+    //TODO: evt. bruge metoderne senere
     public String getRoomHelp() {
         return roomHelp;
     }
-
     public void setRoomHelp(String roomHelp) {
         this.roomHelp = roomHelp;
     }

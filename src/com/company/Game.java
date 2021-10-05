@@ -9,174 +9,166 @@ public class Game {
     boolean goAgain = true;
 
 
-
     public void runGame() {
-    Player player = new Player("Thor");
+        Player player = new Player("Thor");
         System.out.println("You come to your senses... " +
-                "\nYour head feels as if you have been hit with a mallet. " +
-                "\nAs your eyes adjust to the surroundings, you realize that may just be the case. " +
-                "\nYour bare feet stick to the tiled floor and whatever half-dried liquid covers it, the scent of decay is cloying. " +
-                "\nYou think that it might be a good idea to find an exit. " +
-                "\nFast." +
-                "\n(Type 'help' for a list of available commands)");
+                           "\nYour head feels as if you have been hit with a mallet. " +
+                           "\nAs your eyes adjust to the surroundings, you realize that may just be the case. " +
+                           "\nYour bare feet stick to the tiled floor and whatever half-dried liquid covers it, the scent of decay is cloying. " +
+                           "\nYou think that it might be a good idea to find an exit. " +
+                           "\nFast." +
+                           "\n(Type 'help' for a list of available commands)" +
+                           "\n\nYou are currently in the Chute room. " + player.getCurrentRoom().getDescription() + ".");
 
         while (goAgain) {
 
             String userInput = sc.nextLine().toLowerCase().trim();
-            String command = userInput;
-            if (command.startsWith("pick up")){
-                String item = command.substring(8);
-                pickUp(item, player);
-            }
-            if (command.startsWith("drop")){
-                String item = command.substring(5);
-                drop(item, player);
-            }
-            command = parser(userInput);
-
+            String command = parser(userInput);
 
             switch (command) {
-                case "n":
-                case "e":
-                case "s":
-                case "w":
-                    move(command, player);
+                case "n", "e", "s", "w", "g":
+                    if (userInput.startsWith("go ")) {
+                        userInput = userInput.substring(3, 4);
+                    }
+                    move(userInput, player);
                     break;
-
-                case "i" :
+                case "i":
                     printInventory(player.getInventory());
                     break;
-                case "q" :
+                case "q":
+                    System.out.println("Thx for playin' m8");
                     goAgain = false;
                     break;
-
-                case "h" : helpInfo();
+                case "h":
+                    helpInfo();
                     break;
-                case "d" : // er tom fordi ellers printer den default.
+                case "d":
+                    if (userInput.startsWith("drop")) {
+                        String item = userInput.substring(5);
+                        drop(item, player);
+                    }
                     break;
-                case "p" : // er tom fordi ellers printer den default.
+                case "p":
+                    if (userInput.startsWith("pick up")) {
+                        String item = userInput.substring(8);
+                        pickUp (item, player, player.getPlayerCarryCapacity());
+                    }
                     break;
-                case "l" : lookAround(player);
+                case "l":
+                    lookAround(player);
                     break;
                 default:
                     System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
-
-
             }
         }
     }
 
-    private void printInventory (ArrayList<Item> inventory){
-        String result = "\nYou are carrying ";
+    private void printInventory(ArrayList<Item> inventory) {
+        String result = "You are carrying ";
         for (int i = 0; i < inventory.size(); i++) {
-
-            if (i == inventory.size()-1) {
+            if (i == inventory.size() - 1) {
                 result += inventory.get(i).getItemName() + ".";
-            } else if (i == inventory.size()-2){
-                result += inventory.get(i).getItemName()+" and ";
+            } else if (i == inventory.size() - 2) {
+                result += inventory.get(i).getItemName() + " and ";
             } else {
                 result += inventory.get(i).getItemName() + ", ";
             }
-
         }
-        if (result.equals("\nYou are carrying ")){
+        if (result.equals("You are carrying ")) {
             result += "nothing.";
         }
         System.out.println(result);
     }
 
-    private void drop (String substring, Player player) {
+    private void drop(String substring, Player player) {
         String currentItem = substring;
-        ArrayList<Item> tempRoomItems = player.getCurrentRoom().getItems();
-        ArrayList<Item> tempInventory = player.getInventory();
-        for (int i = 0; i < tempInventory.size(); i++) {
-            if (currentItem.equals(tempInventory.get(i).getItemName())) {
-                tempRoomItems.add(new Item(tempInventory.get(i).getItemName()));
-                System.out.println("You drop " + tempInventory.get(i).getItemName() + " well done.");
-                tempInventory.remove(i);
+        ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
+        ArrayList<Item> playerInventory = player.getInventory();
+        for (int i = 0; i < playerInventory.size(); i++) {
+            if (currentItem.equals(playerInventory.get(i).getItemName())) {
+                itemsRoom.add(new Item(playerInventory.get(i).getItemName()));
+                System.out.println("You dropped " + playerInventory.get(i).getItemName() + " in the " + player.getCurrentRoom().getName());
+                playerInventory.remove(i);
             }
         }
     }
 
-    private void pickUp(String substring, Player player) {
+    private void pickUp(String substring, Player player, boolean playerCarryCapacity) {//Work in progress, currently not working as intended.
         String currentItem = substring;
-        ArrayList<Item> tempInventory = player.getInventory();
-        ArrayList<Item> tempItems = player.getCurrentRoom().getItems();
-        for (int i = 0; i < tempItems.size(); i++) {
-            if (currentItem.equals(tempItems.get(i).getItemName())) {
-                tempInventory.add(new Item(tempItems.get(i).getItemName()));
-                System.out.println("You pick up " + tempItems.get(i).getItemName() + " well done.");
-                tempItems.remove(i);
+        ArrayList<Item> playerInventory = player.getInventory();
+        ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
+        if (playerCarryCapacity == true) {
+            for (int i = 0; i < itemsRoom.size(); i++) {
+                if (currentItem.equals(itemsRoom.get(i).getItemName())) {
+                    playerInventory.add(new Item(itemsRoom.get(i).getItemName()));
+                    System.out.println("You picked up " + itemsRoom.get(i).getItemName());
+                    itemsRoom.remove(i);
+                    player.getPlayerCarryCapacity();
+                }
             }
         }
+        if (playerCarryCapacity == false){
+            System.out.println("You're carrying too many items. Drop some.");
+        }
     }
-
 
     private void lookAround(Player player) {
         System.out.println("You take a look at your surroundings...");
-        System.out.println("You are in the" + player.getCurrentRoom().getName() + ". " + player.getCurrentRoom().getDescription());
-        ArrayList<Item> tempItems = player.getCurrentRoom().getItems();
-        printItems(tempItems);
+        System.out.println(player.getCurrentRoom().getDescription());
+        ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
+        printItems(itemsRoom);
     }
 
     private void helpInfo() {
         System.out.println("There is little help to be found here." +
-                "\nType 'look' to get a description of your current room. " +
-                "\nType '(n)orth', '(e)ast', '(s)outh', or '(w)est' to move in one of the cardinal directions." +
-                "\nType 'take' + the item you want to pick up."+
-                "\nType 'drop' + the item you want to drop."+
-                "\nType 'inventory' to look at what you are carrying."+
-                "\nType 'quit' to quit the game.");
-
+                           "\nType 'look' to get a description of your current room. " +
+                           "\nType '(n)orth', '(e)ast', '(s)outh', or '(w)est' to move in one of the cardinal directions." +
+                           "\nType 'pick up' + the item you want to pick up." +
+                           "\nType 'drop' + the item you want to drop." +
+                           "\nType '(i)nventory' to look at what you are carrying." +
+                           "\nType '(q)uit' to quit the game.");
     }
 
     private void printItems(ArrayList<Item> roomItems) {
 
-        String result = "\nYou see ";
+        String result = "You see ";
         for (int i = 0; i < roomItems.size(); i++) {
 
-            if (i == roomItems.size()-1) {
-                result += roomItems.get(i).getItemName() + ".";
-            } else if (i == roomItems.size()-2){
-                result += roomItems.get(i).getItemName()+" and ";
+            if (i == roomItems.size() - 1) {
+                result += roomItems.get(i).getItemDescription() + ".";
+            } else if (i == roomItems.size() - 2) {
+                result += roomItems.get(i).getItemDescription() + " and ";
             } else {
-                result += roomItems.get(i).getItemName() + ", ";
+                result += roomItems.get(i).getItemDescription() + ", ";
             }
-
         }
-        if (result.equals("\nYou see ")){
+        if (result.equals("You see ")) {
             result += "nothing of interest.";
         }
         System.out.println(result);
     }
 
     private void move(String command, Player player) {
-        if (command.equals("n") || command.equals("e")  || command.equals("s") || command.equals("w")){
-            if (player.move(command) == false){
+        if (command.equals("n") || command.equals("e") || command.equals("s") || command.equals("w")) {
+            if (!player.move(command)) {
                 System.out.println("You can't go that way.");
-            }else {System.out.println("You move to the " + player.getCurrentRoom().getName() + ". " + player.getCurrentRoom().getDescription());
-                ArrayList<Item> temp = player.getCurrentRoom().getItems();
-                    printItems(temp);}
+            } else {
+                System.out.println("You move to the " + player.getCurrentRoom().getName() + ". "
+                                   + player.getCurrentRoom().getDescription() + ".");
+                ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
+                printItems(itemsRoom);
+            }
+        }
     }
-}
 
-    private String parser (String input){
+    private String parser(String input) {
 
-        String command = input + "zzzzzzzzzz"; // workaround, de 10 z'er
-
-        if (command.startsWith("go ")){
-            command = command.substring(3,4);
+        String command = input + " ";
+        if (command.startsWith(" ")) {
+            return command;
+        } else {
+            command = input.substring(0,1);
         }
-        else if (command.startsWith("exit")){
-            command = "q";
-
-        }
-
-        else
-            command = command.substring(0, 1);
-
-
         return command;
     }
-
 }
