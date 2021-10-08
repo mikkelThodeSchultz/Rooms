@@ -6,7 +6,8 @@ public class Player {
     private String name;
     private Room currentRoom;
     private ArrayList<Item> inventory = new ArrayList<>();
-    public int playerCarryCapacity = 10;//Work in progress, currently not working as intended (read: at all).
+    private int playerCarryCapacity = 10;//Work in progress, currently not working as intended (read: at all).
+    private int health = 100;
 
     Map map = new Map();
 
@@ -15,10 +16,36 @@ public class Player {
         currentRoom = map.room1;
         map.createMap();
 
-        inventory.add(new Item ("pants"));
-        inventory.add(new Item ("shirt"));
+        inventory.add(new Item ("pants", "your pants, worn and dirty", 0, FoodChecker.INEDIBLE));
+        inventory.add(new Item ("shirt", "your shirt, blood sticking to the back and shoulders", 0, FoodChecker.INEDIBLE));
     }
 
+    public FoodChecker eat (Item item) { //TODO FIX FOOD ITEM EAT
+            return FoodChecker.INEDIBLE;
+    }
+
+    public FoodChecker eat (Food food) {
+        if (food.getFoodChecker().equals(FoodChecker.EDIBLE)) {
+
+            if (health + food.getHealthPoints() >= 100){
+                health = 100;
+            }else
+            health = health + food.getHealthPoints();
+
+            return FoodChecker.EDIBLE;
+
+        } else if (food.getFoodChecker().equals(FoodChecker.INEDIBLE)) {
+            return FoodChecker.INEDIBLE;
+
+        } else
+            health = health + food.getHealthPoints();
+            return FoodChecker.POISONOUS;
+
+    }
+
+    public int getHealth() {
+        return health;
+    }
     public Room getCurrentRoom() {
         return currentRoom;
     }

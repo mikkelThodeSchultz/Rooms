@@ -37,7 +37,7 @@ public class Game {
                     printInventory(player.getInventory());
                     break;
                 case "q":
-                    System.out.println("Thx for playin' m8");
+                    System.out.println("Leave now, and newer, come back!");
                     goAgain = false;
                     break;
                 case "h":
@@ -57,6 +57,27 @@ public class Game {
                     break;
                 case "l":
                     lookAround(player);
+                    break;
+                    //TODO add til help info
+                case "j":
+                    // health
+                    System.out.println(whatIsMyHealth(player));
+                    System.out.println("You are at " + player.getHealth() + " health points.");
+                    break;
+                case "f":
+                    if (userInput.startsWith("eat")) {
+                        String item = userInput.substring(4);
+                        findItem(player.getInventory(), item);
+                        FoodChecker testFood = player.eat(findItem(player.getInventory(), item));
+                        if  (testFood.equals(FoodChecker.EDIBLE)){
+                            System.out.println("You eat " + item + " and feel better. You are now at " + player.getHealth() + "hp.");
+                        } else if (testFood.equals(FoodChecker.POISONOUS)) {
+                            System.out.println("You eat " + item + " and feel worse. You are now at " + player.getHealth() + "hp.");
+                        } else
+                            System.out.println("You can't eat " + item + "."); //TODO Hvis man ikke har det item i sin inventory skal den sige
+                        //TODO at du ikke har det på dig.
+                    }
+                    // eat
                     break;
                 default:
                     System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
@@ -85,13 +106,16 @@ public class Game {
         String itemName = substring;
         ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
         ArrayList<Item> playerInventory = player.getInventory();
-        for (int i = 0; i < playerInventory.size(); i++) {
-            if (itemName.equals(playerInventory.get(i).getItemName())) {
-                itemsRoom.add(new Item(playerInventory.get(i).getItemName(), playerInventory.get(i).getItemDescription(),
-                        playerInventory.get(i).getItemWeight()));
-                System.out.println("You dropped " + playerInventory.get(i).getItemName() + " in the " + player.getCurrentRoom().getName());
-                playerInventory.remove(i);
-            }
+
+        Item item = findItem(playerInventory, itemName);
+
+        if (item!=null){
+            playerInventory.remove(item);
+            System.out.println("You droppped " + item.getItemName() + " in the " + player.getCurrentRoom().getName() + ".");
+            itemsRoom.add(item);
+        }
+        else {
+            System.out.println("You are not carrying '" + itemName + "' in your inventory");
         }
     }
 
@@ -178,12 +202,39 @@ public class Game {
 
     private String parser(String input) {
 
-        String command = input + " ";
+        String command = input + " "; //TODO Husk at tilføje mellemrum
         if (command.startsWith(" ")) {
             return command;
-        } else {
+
+        }else if (command.equals("health ")){
+            command = "j";
+        }else if (command.startsWith("eat ")){
+            command = "f";
+        }
+        else {
             command = input.substring(0,1);
         }
         return command;
     }
+    public String whatIsMyHealth(Player player){
+        int health = player.getHealth();
+        String healthStatus = null;
+        if (health > 75){
+            healthStatus = "You're doing fine... for now.";
+        }
+        else if (health > 50){
+            healthStatus = "You're looking a bit rough, maybe find some food.";
+        }
+        else if (health > 25){
+            healthStatus = "You're badly injured, avoid fighting and seriously, find some food...";
+        }
+        else if (health > 10){
+            healthStatus = "Apparently you have a death wish";
+        }
+        else {
+            healthStatus = "You´re in massive pain, you can hardly walk. Good luck...";
+        }
+        return healthStatus;
+    }
+
 }

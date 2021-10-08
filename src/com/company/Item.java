@@ -4,17 +4,19 @@ public class Item {
 
     private String itemName;
     private String itemDescription;
-    public int itemWeight;
+    private int itemWeight;
+    private final FoodChecker foodChecker;
 
-    public Item(String itemName, String itemDescription, int itemWeight){
+    public Item(String itemName, String itemDescription, int itemWeight, FoodChecker foodChecker){
 
+        this.foodChecker = foodChecker;
         this.itemName = itemName;
         this.itemDescription = itemDescription;
         this.itemWeight = itemWeight;
     }
 
-    public Item (String itemName){
-        this.itemName = itemName;
+    public FoodChecker getFoodChecker(){
+        return foodChecker;
     }
 
     public String getItemName(){
