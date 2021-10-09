@@ -12,13 +12,13 @@ public class Game {
     public void runGame() {
         Player player = new Player("Thor");
         System.out.println("You come to your senses... " +
-                "\nYour head feels as if you have been hit with a mallet. " +
-                "\nAs your eyes adjust to the surroundings, you realize that may just be the case. " +
-                "\nYour bare feet stick to the tiled floor and whatever half-dried liquid covers it, the scent of decay is cloying. " +
-                "\nYou think that it might be a good idea to find an exit. " +
-                "\nFast." +
-                "\n(Type 'help' for a list of available commands)" +
-                "\n\nYou are currently in the Chute room. " + player.getCurrentRoom().getDescription() + ".");
+                           "\nYour head feels as if you have been hit with a mallet. " +
+                           "\nAs your eyes adjust to the surroundings, you realize that may just be the case. " +
+                           "\nYour bare feet stick to the tiled floor and whatever half-dried liquid covers it, the scent of decay is cloying. " +
+                           "\nYou think that it might be a good idea to find an exit. " +
+                           "\nFast." +
+                           "\n(Type 'help' for a list of available commands)" +
+                           "\n\nYou are currently in the Chute room. " + player.getCurrentRoom().getDescription() + ".");
         player.getCurrentRoom().enteredRoom();
 
         while (goAgain) {
@@ -52,13 +52,13 @@ public class Game {
                 case "p":
                     if (userInput.startsWith("pick up")) {
                         String item = userInput.substring(8);
-                        pickUp (item, player);
+                        pickUp(item, player);
                     }
                     break;
                 case "l":
                     lookAround(player);
                     break;
-                    //TODO add til help info
+                //TODO add til help info
                 case "j":
                     // health
                     System.out.println(whatIsMyHealth(player));
@@ -67,16 +67,22 @@ public class Game {
                 case "f":
                     if (userInput.startsWith("eat")) {
                         String item = userInput.substring(4);
-                        findItem(player.getInventory(), item);
-                        FoodChecker testFood = player.eat(findItem(player.getInventory(), item));
-                        if  (testFood.equals(FoodChecker.EDIBLE)){
-                            System.out.println("You eat " + item + " and feel better. You are now at " + player.getHealth() + "hp.");
-                        } else if (testFood.equals(FoodChecker.POISONOUS)) {
-                            System.out.println("You eat " + item + " and feel worse. You are now at " + player.getHealth() + "hp.");
-                        } else
+                        if (!(findItem(player.getInventory(), item) instanceof Food)) {
                             System.out.println("You can't eat " + item + "."); //TODO Hvis man ikke har det item i sin inventory skal den sige
-                        //TODO at du ikke har det på dig.
+                        } else {
+                            Food testfood = (Food) findItem(player.getInventory(), item);
+
+                            if (player.eat(testfood).equals(FoodChecker.EDIBLE)) {
+                                System.out.println("You eat " + item + " and feel better. You are now at " + player.getHealth() + "hp.");
+                            } else {
+                                System.out.println("You eat " + item + " and feel worse. You are now at " + player.getHealth() + "hp.");
+                            }
+                        }
                     }
+
+                    //FoodChecker testFood = player.eat(findItem(player.getInventory(), item));
+
+                    //TODO at du ikke har det på dig.
                     // eat
                     break;
                 default:
@@ -84,6 +90,7 @@ public class Game {
             }
         }
     }
+
 
     private void printInventory(ArrayList<Item> inventory) {
         String result = "You are carrying ";
@@ -109,12 +116,11 @@ public class Game {
 
         Item item = findItem(playerInventory, itemName);
 
-        if (item!=null){
+        if (item != null) {
             playerInventory.remove(item);
             System.out.println("You droppped " + item.getItemName() + " in the " + player.getCurrentRoom().getName() + ".");
             itemsRoom.add(item);
-        }
-        else {
+        } else {
             System.out.println("You are not carrying '" + itemName + "' in your inventory");
         }
     }
@@ -125,7 +131,7 @@ public class Game {
         ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
 
         Item item = findItem(itemsRoom, currentItem);
-        if(item != null) {
+        if (item != null) {
             if (player.canCarry(item)) {
                 playerInventory.add(item);
                 System.out.println("You picked up " + item.getItemName());
@@ -157,12 +163,12 @@ public class Game {
 
     private void helpInfo() {
         System.out.println("There is little help to be found here." +
-                "\nType 'look' to get a description of your current room. " +
-                "\nType '(n)orth', '(e)ast', '(s)outh', or '(w)est' to move in one of the cardinal directions." +
-                "\nType 'pick up' + the item you want to pick up." +
-                "\nType 'drop' + the item you want to drop." +
-                "\nType '(i)nventory' to look at what you are carrying." +
-                "\nType '(q)uit' to quit the game.");
+                           "\nType 'look' to get a description of your current room. " +
+                           "\nType '(n)orth', '(e)ast', '(s)outh', or '(w)est' to move in one of the cardinal directions." +
+                           "\nType 'pick up' + the item you want to pick up." +
+                           "\nType 'drop' + the item you want to drop." +
+                           "\nType '(i)nventory' to look at what you are carrying." +
+                           "\nType '(q)uit' to quit the game.");
     }
 
     private void printItems(ArrayList<Item> roomItems) {
@@ -206,32 +212,28 @@ public class Game {
         if (command.startsWith(" ")) {
             return command;
 
-        }else if (command.equals("health ")){
+        } else if (command.equals("health ")) {
             command = "j";
-        }else if (command.startsWith("eat ")){
+        } else if (command.startsWith("eat ")) {
             command = "f";
-        }
-        else {
-            command = input.substring(0,1);
+        } else {
+            command = input.substring(0, 1);
         }
         return command;
     }
-    public String whatIsMyHealth(Player player){
+
+    public String whatIsMyHealth(Player player) {
         int health = player.getHealth();
         String healthStatus = null;
-        if (health > 75){
+        if (health > 75) {
             healthStatus = "You're doing fine... for now.";
-        }
-        else if (health > 50){
+        } else if (health > 50) {
             healthStatus = "You're looking a bit rough, maybe find some food.";
-        }
-        else if (health > 25){
+        } else if (health > 25) {
             healthStatus = "You're badly injured, avoid fighting and seriously, find some food...";
-        }
-        else if (health > 10){
+        } else if (health > 10) {
             healthStatus = "Apparently you have a death wish";
-        }
-        else {
+        } else {
             healthStatus = "You´re in massive pain, you can hardly walk. Good luck...";
         }
         return healthStatus;

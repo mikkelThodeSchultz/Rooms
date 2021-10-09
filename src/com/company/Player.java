@@ -20,27 +20,24 @@ public class Player {
         inventory.add(new Item ("shirt", "your shirt, blood sticking to the back and shoulders", 0, FoodChecker.INEDIBLE));
     }
 
-    public FoodChecker eat (Item item) { //TODO FIX FOOD ITEM EAT
-            return FoodChecker.INEDIBLE;
-    }
-
     public FoodChecker eat (Food food) {
         if (food.getFoodChecker().equals(FoodChecker.EDIBLE)) {
 
             if (health + food.getHealthPoints() >= 100){
                 health = 100;
-            }else
-            health = health + food.getHealthPoints();
-
+            } else {
+                health = health + food.getHealthPoints();
+            }
             return FoodChecker.EDIBLE;
 
         } else if (food.getFoodChecker().equals(FoodChecker.INEDIBLE)) {
             return FoodChecker.INEDIBLE;
 
-        } else
+        } else {
+            System.out.println(food.getFoodChecker());
             health = health + food.getHealthPoints();
             return FoodChecker.POISONOUS;
-
+        }
     }
 
     public int getHealth() {
