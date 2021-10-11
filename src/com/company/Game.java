@@ -1,5 +1,6 @@
 package com.company;
 
+import javax.swing.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -54,6 +55,7 @@ public class Game {
                         String item = userInput.substring(8);
                         pickUp(item, player);
                     }
+                    else System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
                     break;
                 case "l":
                     lookAround(player);
@@ -82,8 +84,7 @@ public class Game {
 
                     //FoodChecker testFood = player.eat(findItem(player.getInventory(), item));
 
-                    //TODO at du ikke har det på dig.
-                    // eat
+
                     break;
                 default:
                     System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
