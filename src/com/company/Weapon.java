@@ -4,8 +4,8 @@ public abstract class Weapon extends Item{
 
     protected int damageRating;
 
-    public Weapon(String itemName, String itemDescription, int itemWeight, FoodChecker foodChecker, int damageRating) {
-        super(itemName, itemDescription, itemWeight, foodChecker);
+    public Weapon(String itemName, String itemDescription, int itemWeight, int damageRating) {
+        super(itemName, itemDescription, itemWeight);
         this.damageRating = damageRating;
     }
 }

@@ -1,6 +1,5 @@
 package com.company;
 
-import javax.swing.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -47,13 +46,19 @@ public class Game {
                 case "d":
                     if (userInput.startsWith("drop")) {
                         String item = userInput.substring(5);
-                        drop(item, player);
+                        boolean status = player.drop(item);
+                        if (status == true){
+                            System.out.println("You droppped " + item + " in the " + player.getCurrentRoom().getName() + ".");
+                        }
+                        else {
+                            System.out.println("You are not carrying '" + item + "' in your inventory");
+                        }
                     }
                     break;
-                case "p":
-                    if (userInput.startsWith("pick up")) {
-                        String item = userInput.substring(8);
-                        pickUp(item, player);
+                case "t":
+                    if (userInput.startsWith("take ")) {
+                        String item = userInput.substring(5);
+                        player.take(item, Game.this);//TODO nok forkert AF
                     }
                     else System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
                     break;
@@ -69,27 +74,13 @@ public class Game {
                 case "f":
                     if (userInput.startsWith("eat ")) {
                         String item = userInput.substring(4);
-                        if ((findItem(player.getInventory(),item)==null)&&(findItem(player.getCurrentRoom().getItems(),item)==null)){
-                            System.out.println("There is no " + item + " here.");
-                        }
-                        else if ((!(findItem(player.getInventory(), item) instanceof Food))&&(!(findItem(player.getCurrentRoom().getItems(), item) instanceof Food))) {
-                            System.out.println("You can't eat " + item + ".");
-
-                        } else {
-                            if ((findItem(player.getInventory(),item)== null)){
-                                Food testfood = (Food) findItem(player.getCurrentRoom().getItems(), item);
-                                System.out.println(eatFromRoom(testfood,player,item));
-                            }
-                            else if ((findItem(player.getCurrentRoom().getItems(),item) == null)){
-                                Food testfood = (Food) findItem(player.getInventory(), item);
-                                System.out.println(eatFromInventory(testfood,player,item));
-                            }
+                        Status status = player.eat(item);
+                        switch (status){
+                            case NOTFOUND -> System.out.println("There is no "+item+".");
+                            case CANT -> System.out.println("You can't eat " +item+".");
+                            case OKAY -> System.out.println("You've eaten " +item+". You are now at "+player.getHealth()+" health." );
                         }
                     }
-
-                    //FoodChecker testFood = player.eat(findItem(player.getInventory(), item));
-
-
                     break;
                 default:
                     System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
@@ -113,51 +104,6 @@ public class Game {
             result += "nothing.";
         }
         System.out.println(result);
-    }
-
-    private void drop(String substring, Player player) {
-        String itemName = substring;
-        ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
-        ArrayList<Item> playerInventory = player.getInventory();
-
-        Item item = findItem(playerInventory, itemName);
-
-        if (item != null) {
-            playerInventory.remove(item);
-            System.out.println("You droppped " + item.getItemName() + " in the " + player.getCurrentRoom().getName() + ".");
-            itemsRoom.add(item);
-        } else {
-            System.out.println("You are not carrying '" + itemName + "' in your inventory");
-        }
-    }
-
-    private void pickUp(String substring, Player player) {
-        String currentItem = substring;
-        ArrayList<Item> playerInventory = player.getInventory();
-        ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
-
-        Item item = findItem(itemsRoom, currentItem);
-        if (item != null) {
-            if (player.canCarry(item)) {
-                playerInventory.add(item);
-                System.out.println("You picked up " + item.getItemName());
-                itemsRoom.remove(item);
-            } else {
-                System.out.println("You're carrying too many items. Drop some.");
-            }
-        } else {
-            System.out.println("Can't see anything like " + currentItem + " around here!");
-        }
-    }
-
-    private Item findItem(ArrayList<Item> liste, String itemName) {
-        for (int i = 0; i < liste.size(); i++) {
-            Item item = liste.get(i);
-            if (itemName.equals(item.getItemName())) {
-                return item;
-            }
-        }
-        return null;
     }
 
     private void lookAround(Player player) {
@@ -245,27 +191,4 @@ public class Game {
         return healthStatus;
     }
 
-    public String eatFromInventory(Food food,Player player, String item){
-        String resultat = "";
-                Food testfood = food;
-            player.getInventory().remove(testfood);
-            if (player.eat(testfood).equals(FoodChecker.EDIBLE)) {
-                resultat = "You eat " + item + " and feel better. You are now at " + player.getHealth() + "hp.";
-            } else {
-               resultat = "You eat " + item + " and feel worse. You are now at " + player.getHealth() + "hp.";
-            }
-        return resultat;
-    }
-
-    public String eatFromRoom(Food food,Player player, String item){
-        String resultat = "";
-        Food testfood = food;
-        player.getCurrentRoom().getItems().remove(testfood);
-        if (player.eat(testfood).equals(FoodChecker.EDIBLE)) {
-            resultat = "You eat " + item + " and feel better. You are now at " + player.getHealth() + "hp.";
-        } else {
-            resultat = "You eat " + item + " and feel worse. You are now at " + player.getHealth() + "hp.";
-        }
-        return resultat;
-    }
 }

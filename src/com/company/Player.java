@@ -16,32 +16,44 @@ public class Player {
         currentRoom = map.room1;
         map.createMap();
 
-        inventory.add(new Item ("pants", "your pants, worn and dirty", 0, FoodChecker.INEDIBLE));
-        inventory.add(new Item ("shirt", "your shirt, blood sticking to the back and shoulders", 0, FoodChecker.INEDIBLE));
+        inventory.add(new Item ("pants", "your pants, worn and dirty", 0));
+        inventory.add(new Item ("shirt", "your shirt, blood sticking to the back and shoulders", 0));
     }
 
-    public FoodChecker eat (Food food) {
-        if (food.getFoodChecker().equals(FoodChecker.EDIBLE)) {
+    public Status eat (String item) {
+        Status status = null;
+        Food testFood = null;//TODO måske skal der oprettes en midlertidig Food variabel der kan arbejdes med.
 
-            if (health + food.getHealthPoints() >= 100) {
-                health = 100;
-            } else {
-                health = health + food.getHealthPoints();
+        if ((findItem(getInventory(),item) == null) && (findItem(getCurrentRoom().getItems(),item) == null)){
+            status = Status.NOTFOUND;
+        }
+        else if ((!(findItem(getInventory(),item) instanceof Food)) && (!(findItem(getCurrentRoom().getItems(),item) instanceof Food))){
+            status = Status.CANT;
+        }
+        else status = Status.OKAY; //TODO den sletter ikke maden.
+            if (findItem(getInventory(),item) == null) {
+                getCurrentRoom().getItems().remove(item);
+        }
+            else {
+                getInventory().remove(item);
             }
-            return FoodChecker.EDIBLE;
+        return status;
+    }
 
-        } else if (food.getFoodChecker().equals(FoodChecker.INEDIBLE)) {
-            return FoodChecker.INEDIBLE;
-
-        } else{
-            health = health + food.getHealthPoints();
-        return FoodChecker.POISONOUS;
-         }
+    public Item findItem(ArrayList<Item> liste, String itemName) {
+        for (int i = 0; i < liste.size(); i++) {
+            Item item = liste.get(i);
+            if (itemName.equals(item.getItemName())) {
+                return item;
+            }
+        }
+        return null;
     }
 
     public int getHealth() {
         return health;
     }
+
     public Room getCurrentRoom() {
         return currentRoom;
     }
@@ -101,7 +113,47 @@ public class Player {
             }
         } return didIWalk;
     }
+
+    public String take(String substring, Game game) {
+        String currentItem = substring;
+        String resultat = "";
+        ArrayList<Item> playerInventory = getInventory();
+        ArrayList<Item> itemsRoom = getCurrentRoom().getItems();
+
+        Item item = findItem(itemsRoom, currentItem);
+        if (item != null) {
+            if (canCarry(item)) {
+                playerInventory.add(item);
+                resultat = "You picked up " + item.getItemName();
+                itemsRoom.remove(item);
+            } else {
+                resultat = "You're carrying too many items. Drop some.";
+            }
+        } else {
+            resultat ="Can't see anything like " + currentItem + " around here!";
+        }
+        return resultat;
+    }
+    public boolean drop(String substring) {
+        boolean status;
+        String itemName = substring;
+        ArrayList<Item> itemsRoom = getCurrentRoom().getItems();
+        ArrayList<Item> playerInventory = getInventory();
+
+        Item item = findItem(playerInventory, itemName);
+
+        if (item != null) {
+            playerInventory.remove(item);
+            itemsRoom.add(item);
+            status = true;
+        } else {
+            status = false;
+        }
+        return status;
+    }
+
 }
+
 
 
 

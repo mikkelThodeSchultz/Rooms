@@ -24,27 +24,27 @@ public class Map {
         room7.setEast(room8);
         room8.setEast(room9);
 
-        room1.addItem(new Item ("teeth", "a small bag of bloody teeth", 0, FoodChecker.INEDIBLE));
-        room3.addItem(new Item ("play toy", "a funny looking horse", 1, FoodChecker.INEDIBLE));
-        room5.addItem(new Item ("cellphone", "a cellphone with its battery half charged, only one bar though", 1, FoodChecker.INEDIBLE));
-        room5.addItem(new Item ("shards", "shards of glass scattered across the floor", 99, FoodChecker.INEDIBLE));
-        room7.addItem(new Item ("key", "a rusty key", 1, FoodChecker.INEDIBLE));
-        room8.addItem(new Item ("loafers", "a pair of comfy but filthy loafers", 0, FoodChecker.INEDIBLE));
-        room8.addItem(new Item ("tape", "a VHS tape with the first season of 'Saved by the bell'", 1, FoodChecker.INEDIBLE));
-        room9.addItem(new Item ("grinder","A worryingly large industrial-grade meat-grinder fills the room.",99, FoodChecker.INEDIBLE));
+        room1.addItem(new Item ("teeth", "a small bag of bloody teeth", 0));
+        room3.addItem(new Item ("play toy", "a funny looking horse", 1));
+        room5.addItem(new Item ("cellphone", "a cellphone with its battery half charged, only one bar though", 1));
+        room5.addItem(new Item ("shards", "shards of glass scattered across the floor", 99));
+        room7.addItem(new Item ("key", "a rusty key", 1));
+        room8.addItem(new Item ("loafers", "a pair of comfy but filthy loafers", 0));
+        room8.addItem(new Item ("tape", "a VHS tape with the first season of 'Saved by the bell'", 1));
+        room9.addItem(new Item ("grinder","A worryingly large industrial-grade meat-grinder fills the room.",99));
 
-        room1.addItem(new Food ("burger","A big and greasy burger",3, 25, FoodChecker.EDIBLE));
-        room1.addItem(new Food ("rat","A dead rat",3,-25, FoodChecker.POISONOUS));
-        room2.addItem(new Food ("meat", "a slab of human meat", 2, 100, FoodChecker.EDIBLE));
-        room4.addItem(new Food ("limbs", "a pile of rotting human limbs", 6, -50,  FoodChecker.POISONOUS));
+        room1.addItem(new Food ("burger","A big and greasy burger",3, 25));
+        room1.addItem(new Food ("rat","A dead rat",3,-25));
+        room2.addItem(new Food ("meat", "a slab of human meat", 2, 100));
+        room4.addItem(new Food ("limbs", "a pile of rotting human limbs", 6, -50));
 
-        room1.addItem(new MeleeWeapon ("sword", "a rubber sword - very dangerous", 2, FoodChecker.INEDIBLE,15));
-        room2.addItem(new MeleeWeapon ("hook", "a sharp meat hook", 3, FoodChecker.INEDIBLE,5));
-        room3.addItem(new MeleeWeapon ("saw", "a surgical bone-saw, still sharp", 2, FoodChecker.INEDIBLE,10));
-        room3.addItem(new MeleeWeapon ("scalpel", "a scalpel made of sharp surgical steel", 1, FoodChecker.INEDIBLE,5));
-        room4.addItem(new MeleeWeapon ("femur", "a gnawed human femur", 1, FoodChecker.INEDIBLE,2));
-        room6.addItem(new MeleeWeapon ("mallet", "a heavy mallet with some dried blood and hair on its head", 2, FoodChecker.INEDIBLE,5));
+        room1.addItem(new MeleeWeapon ("sword", "a rubber sword - very dangerous", 2, 15));
+        room2.addItem(new MeleeWeapon ("hook", "a sharp meat hook", 3, 5));
+        room3.addItem(new MeleeWeapon ("saw", "a surgical bone-saw, still sharp", 2, 10));
+        room3.addItem(new MeleeWeapon ("scalpel", "a scalpel made of sharp surgical steel", 1, 5));
+        room4.addItem(new MeleeWeapon ("femur", "a gnawed human femur", 1, 2));
+        room6.addItem(new MeleeWeapon ("mallet", "a heavy mallet with some dried blood and hair on its head", 2 ,5));
 
-        room1.addItem(new ShootingWeapon("gun","a gungun",2,FoodChecker.INEDIBLE,15,3));
+        room1.addItem(new ShootingWeapon("gun","a gungun",2,15,3));
     }
 }
