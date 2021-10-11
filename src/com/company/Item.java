@@ -2,10 +2,10 @@ package com.company;
 
 public class Item {
 
-    private String itemName;
-    private String itemDescription;
-    private int itemWeight;
-    private final FoodChecker foodChecker;
+    protected String itemName;
+    protected String itemDescription;
+    protected int itemWeight;
+    protected final FoodChecker foodChecker;
 
     public Item(String itemName, String itemDescription, int itemWeight, FoodChecker foodChecker){
 

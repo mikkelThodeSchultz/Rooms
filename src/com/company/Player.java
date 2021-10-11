@@ -23,7 +23,7 @@ public class Player {
     public FoodChecker eat (Food food) {
         if (food.getFoodChecker().equals(FoodChecker.EDIBLE)) {
 
-            if (health + food.getHealthPoints() >= 100){
+            if (health + food.getHealthPoints() >= 100) {
                 health = 100;
             } else {
                 health = health + food.getHealthPoints();
@@ -33,11 +33,10 @@ public class Player {
         } else if (food.getFoodChecker().equals(FoodChecker.INEDIBLE)) {
             return FoodChecker.INEDIBLE;
 
-        } else {
-            System.out.println(food.getFoodChecker());
+        } else{
             health = health + food.getHealthPoints();
-            return FoodChecker.POISONOUS;
-        }
+        return FoodChecker.POISONOUS;
+         }
     }
 
     public int getHealth() {

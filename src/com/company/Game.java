@@ -65,17 +65,22 @@ public class Game {
                     System.out.println("You are at " + player.getHealth() + " health points.");
                     break;
                 case "f":
-                    if (userInput.startsWith("eat")) {
+                    if (userInput.startsWith("eat ")) {
                         String item = userInput.substring(4);
-                        if (!(findItem(player.getInventory(), item) instanceof Food)) {
-                            System.out.println("You can't eat " + item + "."); //TODO Hvis man ikke har det item i sin inventory skal den sige
-                        } else {
-                            Food testfood = (Food) findItem(player.getInventory(), item);
+                        if ((findItem(player.getInventory(),item)==null)&&(findItem(player.getCurrentRoom().getItems(),item)==null)){
+                            System.out.println("There is no " + item + " here.");
+                        }
+                        else if ((!(findItem(player.getInventory(), item) instanceof Food))&&(!(findItem(player.getCurrentRoom().getItems(), item) instanceof Food))) {
+                            System.out.println("You can't eat " + item + ".");
 
-                            if (player.eat(testfood).equals(FoodChecker.EDIBLE)) {
-                                System.out.println("You eat " + item + " and feel better. You are now at " + player.getHealth() + "hp.");
-                            } else {
-                                System.out.println("You eat " + item + " and feel worse. You are now at " + player.getHealth() + "hp.");
+                        } else {
+                            if ((findItem(player.getInventory(),item)== null)){
+                                Food testfood = (Food) findItem(player.getCurrentRoom().getItems(), item);
+                                System.out.println(eatFromRoom(testfood,player,item));
+                            }
+                            else if ((findItem(player.getCurrentRoom().getItems(),item) == null)){
+                                Food testfood = (Food) findItem(player.getInventory(), item);
+                                System.out.println(eatFromInventory(testfood,player,item));
                             }
                         }
                     }
@@ -125,7 +130,7 @@ public class Game {
         }
     }
 
-    private void pickUp(String substring, Player player) {//Work in progress, currently not working as intended.
+    private void pickUp(String substring, Player player) {
         String currentItem = substring;
         ArrayList<Item> playerInventory = player.getInventory();
         ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
@@ -239,4 +244,27 @@ public class Game {
         return healthStatus;
     }
 
+    public String eatFromInventory(Food food,Player player, String item){
+        String resultat = "";
+                Food testfood = food;
+            player.getInventory().remove(testfood);
+            if (player.eat(testfood).equals(FoodChecker.EDIBLE)) {
+                resultat = "You eat " + item + " and feel better. You are now at " + player.getHealth() + "hp.";
+            } else {
+               resultat = "You eat " + item + " and feel worse. You are now at " + player.getHealth() + "hp.";
+            }
+        return resultat;
+    }
+
+    public String eatFromRoom(Food food,Player player, String item){
+        String resultat = "";
+        Food testfood = food;
+        player.getCurrentRoom().getItems().remove(testfood);
+        if (player.eat(testfood).equals(FoodChecker.EDIBLE)) {
+            resultat = "You eat " + item + " and feel better. You are now at " + player.getHealth() + "hp.";
+        } else {
+            resultat = "You eat " + item + " and feel worse. You are now at " + player.getHealth() + "hp.";
+        }
+        return resultat;
+    }
 }
