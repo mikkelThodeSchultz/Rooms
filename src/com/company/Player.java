@@ -22,14 +22,14 @@ public class Player {
 
     public Status eat(String item) {
         Status status;
-        Food inventoryFood = (Food) findItem(getInventory(), item);
-        Food roomFood = (Food) findItem(getCurrentRoom().getItems(), item);
 
         if ((findItem(getInventory(), item) == null) && (findItem(getCurrentRoom().getItems(), item) == null)) {
             status = Status.NOTFOUND;
         } else if ((!(findItem(getInventory(), item) instanceof Food)) && (!(findItem(getCurrentRoom().getItems(), item) instanceof Food))) {
             status = Status.CANT;
         } else {
+            Food inventoryFood = (Food) findItem(getInventory(), item);
+            Food roomFood = (Food) findItem(getCurrentRoom().getItems(), item);
             status = Status.OKAY;
             if (inventoryFood == null) {
                 health = health + roomFood.getHealthPoints();
@@ -155,17 +155,21 @@ public class Player {
 
     public Status equip(String item) {
         Status status = null;
-        Weapon inventoryWeapon = (Weapon) findItem(getInventory(), item);
 
-        if ((findItem(getInventory(), item) == null)) {
-            status = Status.NOTFOUND;
-        } else if ((!(findItem(getInventory(), item) instanceof Weapon))) {
-            status = Status.CANT;
-        } else {
-            status = Status.OKAY;
-            inventoryWeapon.isEquipped();
-        }
-        return status;
+
+
+            if ((findItem(getInventory(), item) == null)) {
+                status = Status.NOTFOUND;
+            } else if ((!(findItem(getInventory(), item) instanceof Weapon))) {
+                status = Status.CANT;
+            } else {
+                Weapon inventoryWeapon = (Weapon) findItem(getInventory(), item);
+                status = Status.OKAY;
+                inventoryWeapon.isEquipped();
+            }
+            return status;
+
+
     }
 }
 

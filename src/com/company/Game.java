@@ -78,12 +78,20 @@ public class Game {
                     System.out.println("You are at " + player.getHealth() + " health points.");
                     break;
                 case "f", "eat":
-                    Status status = player.eat(object);
-                    switch (status) {
+                    Status eatStatus = player.eat(object);
+                    switch (eatStatus) {
                         case NOTFOUND -> System.out.println("There is no " + object + ".");
                         case CANT -> System.out.println("You can't eat " + object + ".");
                         case OKAY -> System.out.println("You've eaten " + object + ". You are now at " + player.getHealth() + " health.");
                     } break;
+                case "equip":
+                    Status weaponStatus = player.equip(object);
+                    switch (weaponStatus){
+                        case NOTFOUND -> System.out.println("There is no " + object + ".");
+                        case CANT -> System.out.println("You can't equip " + object + ".");
+                        case OKAY -> System.out.println("You've equipped " + object +".");
+                    }
+                    break;
                 default:
                 System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
                 }
