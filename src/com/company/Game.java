@@ -223,7 +223,9 @@ public class Game {
 
     public void attackSequence(Player player, String target){
         Enemy enemy = player.findEnemy(target);
+        if (player.getCurrentWeapon() == null){
 
+        }
 
         if (player.attackEnemy(target, player)){
             System.out.println("You attack " + target + " with " + player.getCurrentWeapon().getItemName() + " dealing "
@@ -232,6 +234,7 @@ public class Game {
                     + " dealing "
                     + enemy.getEnemyWeapon().getDamageRating()
                     + " damage.");
+
             if (player.getCurrentWeapon()instanceof ShootingWeapon){
                 ((ShootingWeapon) player.getCurrentWeapon()).decreasingAmmo();
             }

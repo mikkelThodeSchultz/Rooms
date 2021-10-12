@@ -1,6 +1,7 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Player {
     private String name;
@@ -15,12 +16,20 @@ public class Player {
 
 
     public Player(String name) {
+        inventory.add(new Item("pants", "your pants, worn and dirty", 0));
+        inventory.add(new Item("shirt", "your shirt, blood sticking to the back and shoulders", 0));
+        inventory.add(new MeleeWeapon("bare hands", "dirty and beaten",0,1));
         this.name = name;
         currentRoom = map.room1;
         map.createMap();
 
-        inventory.add(new Item("pants", "your pants, worn and dirty", 0));
-        inventory.add(new Item("shirt", "your shirt, blood sticking to the back and shoulders", 0));
+        String item = "bare hands";
+        Weapon inventoryWeapon = (Weapon) findItem(getInventory(), item);
+
+        currentWeapon = inventoryWeapon;
+
+
+
     }
 
     public Status eat(String item) {
@@ -184,7 +193,7 @@ public class Player {
 
                 Weapon inventoryWeapon = (Weapon) findItem(getInventory(), item);
                 status = Status.OKAY;
-                if (currentWeapon != null){
+                if (currentWeapon != null && !Objects.equals(currentWeapon.getItemName(), "bare hands")){
                     System.out.println("You have unequipped " + currentWeapon.getItemName()); //TODO HVIS MULIGT SÅ FIX SOUT
                 }
                 currentWeapon = inventoryWeapon;
