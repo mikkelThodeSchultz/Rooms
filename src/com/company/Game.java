@@ -19,7 +19,7 @@ public class Game {
                 "\nFast." +
                 "\n(Type 'help' for a list of available commands)" +
                 "\n\nYou are currently in the Chute room. " + player.getCurrentRoom().getDescription() + ".");
-        player.getCurrentRoom().enteredRoom();
+                player.getCurrentRoom().enteredRoom();
 
         while (goAgain) {
 
@@ -116,6 +116,7 @@ public class Game {
     private void printInventory(ArrayList<Item> inventory) {
         String result = "You are carrying ";
         for (int i = 0; i < inventory.size(); i++) {
+
             if (i == inventory.size() - 1) {
                 result += inventory.get(i).getItemName() + ".";
             } else if (i == inventory.size() - 2) {
@@ -123,10 +124,12 @@ public class Game {
             } else {
                 result += inventory.get(i).getItemName() + ", ";
             }
+
         }
         if (result.equals("You are carrying ")) {
             result += "nothing.";
         }
+
         System.out.println(result);
     }
 
@@ -223,11 +226,14 @@ public class Game {
 
     public void attackSequence(Player player, String target){
         Enemy enemy = player.findEnemy(target);
-        if (player.getCurrentWeapon() == null){
-
+        if (target.equals("")){
+            System.out.println("You attack into the air, hitting nothing.");
         }
 
-        if (player.attackEnemy(target, player)){
+        if (player.getCurrentWeapon() == null){
+            System.out.println("You have no weapon equipped");
+
+        } else if (player.attackEnemy(target, player)){
             System.out.println("You attack " + target + " with " + player.getCurrentWeapon().getItemName() + " dealing "
                     + player.getCurrentWeapon().getDamageRating() + " damage.");
             System.out.println("The " + enemy.getName() + " attacks you with " + enemy.getEnemyWeapon().getItemName()
@@ -237,19 +243,14 @@ public class Game {
 
             if (player.getCurrentWeapon()instanceof ShootingWeapon){
                 ((ShootingWeapon) player.getCurrentWeapon()).decreasingAmmo();
-            }
 
-
-            if (enemy.getHealth()<= 0){
-                System.out.println("yay, you have won");
+            }if (enemy.getHealth()<= 0){
+                System.out.println("Your foe lies slain before you, well done!");
                 player.getCurrentRoom().addItem(enemy.getEnemyWeapon());
                 player.getCurrentRoom().removeEnemy(enemy);
             }
-
-        } else {
+        } else if (!target.equals("")){
             System.out.println("There is no such enemy in the room.");
-    }
-
-
+        }
     }
 }

@@ -18,15 +18,14 @@ public class Player {
     public Player(String name) {
         inventory.add(new Item("pants", "your pants, worn and dirty", 0));
         inventory.add(new Item("shirt", "your shirt, blood sticking to the back and shoulders", 0));
-        inventory.add(new MeleeWeapon("bare hands", "dirty and beaten",0,1));
+
         this.name = name;
         currentRoom = map.room1;
         map.createMap();
 
-        String item = "bare hands";
-        Weapon inventoryWeapon = (Weapon) findItem(getInventory(), item);
 
-        currentWeapon = inventoryWeapon;
+
+
 
 
 
