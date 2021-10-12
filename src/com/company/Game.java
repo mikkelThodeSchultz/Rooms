@@ -77,12 +77,9 @@ public class Game {
                 case "t", "take":
                     System.out.println(player.take(object));
                     break;
-                case "y":
-
                 case "l", "look":
                     lookAround(player);
                     break;
-                //TODO add til help info
                 case "health":
                     // health
                     System.out.println(whatIsMyHealth(player));
@@ -142,16 +139,16 @@ public class Game {
         printEnemies(enemiesRoom);
     }
 
-    private void printEnemies(ArrayList<Enemy> enemiesRoom) { //TODO Mangler en masse. Name og i move commando
+    private void printEnemies(ArrayList<Enemy> enemiesRoom) {
 
         String result = "You see ";
         for (int i = 0; i < enemiesRoom.size(); i++) {
 
             if (i == enemiesRoom.size() -1){
-                result += enemiesRoom.get(i).getEnemyDescription() + ".";
+                result += enemiesRoom.get(i).getEnemyDescription() + "!";
             }
         } if (result.equals("You see ")) {
-            result += "no enemies.";
+            result = "";
         }
         System.out.println(result);
     }
@@ -162,7 +159,10 @@ public class Game {
                 "\nType '(n)orth', '(e)ast', '(s)outh', or '(w)est' to move in one of the cardinal directions." +
                 "\nType 'take' + the item you want to pick up." +
                 "\nType 'drop' + the item you want to drop." +
+                "\nType 'equip + the item you want to equip." +
                 "\nType 'eat' + the food you want to eat." +
+                "\nType 'attack' + the target you want to attack." +
+                "\nType 'health' to see your health points." +
                 "\nType '(i)nventory' to look at what you are carrying." +
                 "\nType '(q)uit' to quit the game.");
     }
@@ -197,7 +197,9 @@ public class Game {
                     System.out.println(player.getCurrentRoom().getDescription() + ".");
                 }
                 ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
+                ArrayList<Enemy> enemiesRoom = (player.getCurrentRoom().getRoomEnemies());
                 printItems(itemsRoom);
+                printEnemies(enemiesRoom);
             }
         }
     }
