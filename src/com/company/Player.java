@@ -6,7 +6,7 @@ public class Player {
     private String name;
     private Room currentRoom;
     private ArrayList<Item> inventory = new ArrayList<>();
-    private int playerCarryCapacity = 10;//Work in progress, currently not working as intended (read: at all).
+    private int playerCarryCapacity = 10;
     private int health = 100;
 
     Map map = new Map();
@@ -16,29 +16,33 @@ public class Player {
         currentRoom = map.room1;
         map.createMap();
 
-        inventory.add(new Item ("pants", "your pants, worn and dirty", 0));
-        inventory.add(new Item ("shirt", "your shirt, blood sticking to the back and shoulders", 0));
+        inventory.add(new Item("pants", "your pants, worn and dirty", 0));
+        inventory.add(new Item("shirt", "your shirt, blood sticking to the back and shoulders", 0));
     }
 
-    public Status eat (String item) {
-        Status status = null;
-        Food testFood = null;//TODO måske skal der oprettes en midlertidig Food variabel der kan arbejdes med.
+    public Status eat(String item) {
+        Status status;
+        Food inventoryFood = (Food) findItem(getInventory(), item);
+        Food roomFood = (Food) findItem(getCurrentRoom().getItems(), item);
 
-        if ((findItem(getInventory(),item) == null) && (findItem(getCurrentRoom().getItems(),item) == null)){
+        if ((findItem(getInventory(), item) == null) && (findItem(getCurrentRoom().getItems(), item) == null)) {
             status = Status.NOTFOUND;
-        }
-        else if ((!(findItem(getInventory(),item) instanceof Food)) && (!(findItem(getCurrentRoom().getItems(),item) instanceof Food))){
+        } else if ((!(findItem(getInventory(), item) instanceof Food)) && (!(findItem(getCurrentRoom().getItems(), item) instanceof Food))) {
             status = Status.CANT;
-        }
-        else status = Status.OKAY; //TODO den sletter ikke maden.
-            if (findItem(getInventory(),item) == null) {
-                getCurrentRoom().getItems().remove(item);
-        }
-            else {
-                getInventory().remove(item);
+        } else {
+            status = Status.OKAY;
+            if (inventoryFood == null) {
+                health = health + roomFood.getHealthPoints();
+                getCurrentRoom().getItems().remove(roomFood);
+            } else
+                health = health + inventoryFood.getHealthPoints();
+                getInventory().remove(inventoryFood);
             }
-        return status;
-    }
+            if (health > 100){
+                health = 100;
+            }
+            return status;
+        }
 
     public Item findItem(ArrayList<Item> liste, String itemName) {
         for (int i = 0; i < liste.size(); i++) {
@@ -65,7 +69,7 @@ public class Player {
     public boolean canCarry(Item item) {
         int resultingWeight = getCumulatedWeight() + item.getItemWeight();
 
-        if( resultingWeight > playerCarryCapacity ) {
+        if (resultingWeight > playerCarryCapacity) {
             return false;
         } else {
             return true;
@@ -80,7 +84,7 @@ public class Player {
         return cumulatedWeight;
     }
 
-    public boolean move (String command) {
+    public boolean move(String command) {
         boolean didIWalk = true;
         if (command.equals("n")) {
             if (currentRoom.getNorth() != null) {
@@ -96,8 +100,7 @@ public class Player {
             } else {
                 didIWalk = false;
             }
-        }
-        else if (command.equals("w")) {
+        } else if (command.equals("w")) {
             if (currentRoom.getWest() != null) {
                 currentRoom = currentRoom.getWest();
                 didIWalk = true;
@@ -111,40 +114,38 @@ public class Player {
             } else {
                 didIWalk = false;
             }
-        } return didIWalk;
+        }
+        return didIWalk;
     }
 
-    public String take(String substring, Game game) {
+    public String take(String substring) {
         String currentItem = substring;
         String resultat = "";
-        ArrayList<Item> playerInventory = getInventory();
-        ArrayList<Item> itemsRoom = getCurrentRoom().getItems();
 
-        Item item = findItem(itemsRoom, currentItem);
+        Item item = findItem(getCurrentRoom().getItems(), currentItem);
         if (item != null) {
             if (canCarry(item)) {
-                playerInventory.add(item);
+                inventory.add(item);
                 resultat = "You picked up " + item.getItemName();
-                itemsRoom.remove(item);
+                getCurrentRoom().getItems().remove(item);
             } else {
                 resultat = "You're carrying too many items. Drop some.";
             }
         } else {
-            resultat ="Can't see anything like " + currentItem + " around here!";
+            resultat = "Can't see anything like " + currentItem + " around here!";
         }
         return resultat;
     }
+
     public boolean drop(String substring) {
         boolean status;
         String itemName = substring;
-        ArrayList<Item> itemsRoom = getCurrentRoom().getItems();
-        ArrayList<Item> playerInventory = getInventory();
 
-        Item item = findItem(playerInventory, itemName);
+        Item item = findItem(inventory, itemName);
 
         if (item != null) {
-            playerInventory.remove(item);
-            itemsRoom.add(item);
+            inventory.remove(item);
+            getCurrentRoom().getItems().add(item);
             status = true;
         } else {
             status = false;
@@ -152,6 +153,20 @@ public class Player {
         return status;
     }
 
+    public Status equip(String item) {
+        Status status = null;
+        Weapon inventoryWeapon = (Weapon) findItem(getInventory(), item);
+
+        if ((findItem(getInventory(), item) == null)) {
+            status = Status.NOTFOUND;
+        } else if ((!(findItem(getInventory(), item) instanceof Weapon))) {
+            status = Status.CANT;
+        } else {
+            status = Status.OKAY;
+            inventoryWeapon.isEquipped();
+        }
+        return status;
+    }
 }
 
 

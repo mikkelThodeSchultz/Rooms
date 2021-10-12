@@ -23,70 +23,72 @@ public class Game {
 
         while (goAgain) {
 
-            String userInput = sc.nextLine().toLowerCase().trim();
-            String command = parser(userInput);
+            String input = sc.nextLine().toLowerCase().trim();
+            String command = "";
+            String object = "";
+
+
+            if (input.contains(" ")) {
+                command = input.substring(0, input.lastIndexOf(" "));
+                object = input.substring(input.indexOf(" ") + 1);
+            } else {
+                command = input;
+            }
 
             switch (command) {
-                case "n", "e", "s", "w", "g":
-                    if (userInput.startsWith("go ")) {
-                        userInput = userInput.substring(3, 4);
+                case "n", "e", "s", "w", "go", "north", "east", "south", "west":
+                    if (command.startsWith("go")) {
+                        object = object.substring(0,1);
+                        move(object, player);
+                    } else {
+                        command = command.substring(0,1);
+                        move(command,player);
                     }
-                    move(userInput, player);
                     break;
-                case "i":
+                case "i", "inventory":
                     printInventory(player.getInventory());
                     break;
-                case "q":
+                case "q", "quit", "exit":
                     System.out.println("Leave now, and newer, come back!");
                     goAgain = false;
                     break;
-                case "h":
+                case "h", "help":
                     helpInfo();
                     break;
-                case "d":
-                    if (userInput.startsWith("drop")) {
-                        String item = userInput.substring(5);
-                        boolean status = player.drop(item);
-                        if (status == true){
-                            System.out.println("You droppped " + item + " in the " + player.getCurrentRoom().getName() + ".");
-                        }
-                        else {
-                            System.out.println("You are not carrying '" + item + "' in your inventory");
-                        }
+                case "d", "drop":
+                    boolean itemDropped = player.drop(object);
+                    if (itemDropped) {
+                        System.out.println("You droppped " + object + " in the " + player.getCurrentRoom().getName() + ".");
+                    } else {
+                        System.out.println("You are not carrying '" + object + "' in your inventory");
                     }
                     break;
-                case "t":
-                    if (userInput.startsWith("take ")) {
-                        String item = userInput.substring(5);
-                        player.take(item, Game.this);//TODO nok forkert AF
-                    }
-                    else System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
+                case "t", "take":
+                    System.out.println(player.take(object));
                     break;
-                case "l":
+                case "y":
+
+                case "l", "look":
                     lookAround(player);
                     break;
                 //TODO add til help info
-                case "j":
+                case "health":
                     // health
                     System.out.println(whatIsMyHealth(player));
                     System.out.println("You are at " + player.getHealth() + " health points.");
                     break;
-                case "f":
-                    if (userInput.startsWith("eat ")) {
-                        String item = userInput.substring(4);
-                        Status status = player.eat(item);
-                        switch (status){
-                            case NOTFOUND -> System.out.println("There is no "+item+".");
-                            case CANT -> System.out.println("You can't eat " +item+".");
-                            case OKAY -> System.out.println("You've eaten " +item+". You are now at "+player.getHealth()+" health." );
-                        }
-                    }
-                    break;
+                case "f", "eat":
+                    Status status = player.eat(object);
+                    switch (status) {
+                        case NOTFOUND -> System.out.println("There is no " + object + ".");
+                        case CANT -> System.out.println("You can't eat " + object + ".");
+                        case OKAY -> System.out.println("You've eaten " + object + ". You are now at " + player.getHealth() + " health.");
+                    } break;
                 default:
-                    System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
+                System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
+                }
             }
         }
-    }
 
 
     private void printInventory(ArrayList<Item> inventory) {
@@ -117,8 +119,9 @@ public class Game {
         System.out.println("There is little help to be found here." +
                            "\nType 'look' to get a description of your current room. " +
                            "\nType '(n)orth', '(e)ast', '(s)outh', or '(w)est' to move in one of the cardinal directions." +
-                           "\nType 'pick up' + the item you want to pick up." +
+                           "\nType 'take' + the item you want to pick up." +
                            "\nType 'drop' + the item you want to drop." +
+                           "\nType 'eat' + the food you want to eat." +
                            "\nType '(i)nventory' to look at what you are carrying." +
                            "\nType '(q)uit' to quit the game.");
     }
@@ -156,22 +159,6 @@ public class Game {
                 printItems(itemsRoom);
             }
         }
-    }
-
-    private String parser(String input) {
-
-        String command = input + " "; //TODO Husk at tilføje mellemrum
-        if (command.startsWith(" ")) {
-            return command;
-
-        } else if (command.equals("health ")) {
-            command = "j";
-        } else if (command.startsWith("eat ")) {
-            command = "f";
-        } else {
-            command = input.substring(0, 1);
-        }
-        return command;
     }
 
     public String whatIsMyHealth(Player player) {
