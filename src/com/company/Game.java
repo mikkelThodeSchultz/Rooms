@@ -12,13 +12,13 @@ public class Game {
     public void runGame() {
         Player player = new Player("Thor");
         System.out.println("You come to your senses... " +
-                           "\nYour head feels as if you have been hit with a mallet. " +
-                           "\nAs your eyes adjust to the surroundings, you realize that may just be the case. " +
-                           "\nYour bare feet stick to the tiled floor and whatever half-dried liquid covers it, the scent of decay is cloying. " +
-                           "\nYou think that it might be a good idea to find an exit. " +
-                           "\nFast." +
-                           "\n(Type 'help' for a list of available commands)" +
-                           "\n\nYou are currently in the Chute room. " + player.getCurrentRoom().getDescription() + ".");
+                "\nYour head feels as if you have been hit with a mallet. " +
+                "\nAs your eyes adjust to the surroundings, you realize that may just be the case. " +
+                "\nYour bare feet stick to the tiled floor and whatever half-dried liquid covers it, the scent of decay is cloying. " +
+                "\nYou think that it might be a good idea to find an exit. " +
+                "\nFast." +
+                "\n(Type 'help' for a list of available commands)" +
+                "\n\nYou are currently in the Chute room. " + player.getCurrentRoom().getDescription() + ".");
         player.getCurrentRoom().enteredRoom();
 
         while (goAgain) {
@@ -38,11 +38,22 @@ public class Game {
             switch (command) {
                 case "n", "e", "s", "w", "go", "north", "east", "south", "west":
                     if (command.startsWith("go")) {
-                        object = object.substring(0,1);
+                        object = object.substring(0, 1);
                         move(object, player);
                     } else {
-                        command = command.substring(0,1);
-                        move(command,player);
+                        command = command.substring(0, 1);
+                        move(command, player);
+                    }
+                    break;
+                case "a", "attack":
+                    if (command.startsWith("attack")){
+                        if (player.getCurrentWeapon() instanceof ShootingWeapon){
+                            if (((ShootingWeapon) player.getCurrentWeapon()).getAmmo() <= 0){
+                                System.out.println("You have no ammo left");
+                                break;
+                            }
+                        }
+                        attackSequence(player, object);
                     }
                     break;
                 case "i", "inventory":
@@ -83,21 +94,27 @@ public class Game {
                         case NOTFOUND -> System.out.println("There is no " + object + ".");
                         case CANT -> System.out.println("You can't eat " + object + ".");
                         case OKAY -> System.out.println("You've eaten " + object + ". You are now at " + player.getHealth() + " health.");
-                    } break;
+                    }
+                    break;
                 case "equip":
                     Status weaponStatus = player.equip(object);
-                    switch (weaponStatus){
+                    switch (weaponStatus) {
                         case NOTFOUND -> System.out.println("There is no " + object + ".");
                         case CANT -> System.out.println("You can't equip " + object + ".");
-                        case OKAY -> System.out.println("You've equipped " + object +".");
+                        case OKAY -> System.out.println("You've equipped " + object + ".");
                     }
                     break;
                 default:
-                System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
-                }
+                    System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
+
+            }
+            if (player.getHealth() <= 0){
+                System.out.println("You have died");
+                goAgain = false;
             }
         }
 
+    }
 
     private void printInventory(ArrayList<Item> inventory) {
         String result = "You are carrying ";
@@ -121,17 +138,33 @@ public class Game {
         System.out.println(player.getCurrentRoom().getDescription());
         ArrayList<Item> itemsRoom = player.getCurrentRoom().getItems();
         printItems(itemsRoom);
+        ArrayList<Enemy> enemiesRoom = (player.getCurrentRoom().getRoomEnemies());
+        printEnemies(enemiesRoom);
+    }
+
+    private void printEnemies(ArrayList<Enemy> enemiesRoom) { //TODO Mangler en masse. Name og i move commando
+
+        String result = "You see ";
+        for (int i = 0; i < enemiesRoom.size(); i++) {
+
+            if (i == enemiesRoom.size() -1){
+                result += enemiesRoom.get(i).getEnemyDescription() + ".";
+            }
+        } if (result.equals("You see ")) {
+            result += "no enemies.";
+        }
+        System.out.println(result);
     }
 
     private void helpInfo() {
         System.out.println("There is little help to be found here." +
-                           "\nType 'look' to get a description of your current room. " +
-                           "\nType '(n)orth', '(e)ast', '(s)outh', or '(w)est' to move in one of the cardinal directions." +
-                           "\nType 'take' + the item you want to pick up." +
-                           "\nType 'drop' + the item you want to drop." +
-                           "\nType 'eat' + the food you want to eat." +
-                           "\nType '(i)nventory' to look at what you are carrying." +
-                           "\nType '(q)uit' to quit the game.");
+                "\nType 'look' to get a description of your current room. " +
+                "\nType '(n)orth', '(e)ast', '(s)outh', or '(w)est' to move in one of the cardinal directions." +
+                "\nType 'take' + the item you want to pick up." +
+                "\nType 'drop' + the item you want to drop." +
+                "\nType 'eat' + the food you want to eat." +
+                "\nType '(i)nventory' to look at what you are carrying." +
+                "\nType '(q)uit' to quit the game.");
     }
 
     private void printItems(ArrayList<Item> roomItems) {
@@ -186,4 +219,32 @@ public class Game {
         return healthStatus;
     }
 
+    public void attackSequence(Player player, String target){
+        Enemy enemy = player.findEnemy(target);
+
+
+        if (player.attackEnemy(target, player)){
+            System.out.println("You attack " + target + " with " + player.getCurrentWeapon().getItemName() + " dealing "
+                    + player.getCurrentWeapon().getDamageRating() + " damage.");
+            System.out.println("The " + enemy.getName() + " attacks you with " + enemy.getEnemyWeapon().getItemName()
+                    + " dealing "
+                    + enemy.getEnemyWeapon().getDamageRating()
+                    + " damage.");
+            if (player.getCurrentWeapon()instanceof ShootingWeapon){
+                ((ShootingWeapon) player.getCurrentWeapon()).decreasingAmmo();
+            }
+
+
+            if (enemy.getHealth()<= 0){
+                System.out.println("yay, you have won");
+                player.getCurrentRoom().addItem(enemy.getEnemyWeapon());
+                player.getCurrentRoom().removeEnemy(enemy);
+            }
+
+        } else {
+            System.out.println("There is no such enemy in the room.");
+    }
+
+
+    }
 }

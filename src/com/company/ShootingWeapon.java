@@ -8,4 +8,17 @@ public class ShootingWeapon extends Weapon{
         super(itemName, itemDescription, itemWeight, damageRating);
         this.ammo = ammo;
     }
+
+    @Override
+    public int getDamageRating() {
+        return damageRating;
+    }
+
+    public int getAmmo(){
+        return ammo;
+    }
+
+    public void decreasingAmmo(){
+        ammo--;
+    }
 }

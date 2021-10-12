@@ -45,6 +45,10 @@ public class Map {
         room4.addItem(new MeleeWeapon ("femur", "a gnawed human femur", 1, 2));
         room6.addItem(new MeleeWeapon ("mallet", "a heavy mallet with some dried blood and hair on its head", 2 ,5));
 
-        room1.addItem(new ShootingWeapon("gun","a gungun",2,15,3));
+        room1.addItem(new ShootingWeapon("gun","a gungun",2,1,2));
+
+        room3.addEnemy(new Enemy("troll", "an ugly fuck", 20, new MeleeWeapon ("Club", "a sturdy club", 3, 20)));
+        room4.addEnemy(new Enemy("psychopath", "a crazy baled very strong dude", 35, new MeleeWeapon ("Chainsaw", "a noisy scary chainsaw", 6, 35)));
+        room6.addEnemy(new Enemy("dog", "a scary dog with red eyes", 10, new MeleeWeapon ("Collar", "a spiked collar", 1, 10)));
     }
 }

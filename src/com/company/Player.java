@@ -8,8 +8,11 @@ public class Player {
     private ArrayList<Item> inventory = new ArrayList<>();
     private int playerCarryCapacity = 10;
     private int health = 100;
+    private Weapon currentWeapon = null;
 
     Map map = new Map();
+
+
 
     public Player(String name) {
         this.name = name;
@@ -49,6 +52,16 @@ public class Player {
             Item item = liste.get(i);
             if (itemName.equals(item.getItemName())) {
                 return item;
+            }
+        }
+        return null;
+    }
+    public Enemy findEnemy(String enemyName) {
+
+        for (int i = 0; i < currentRoom.getRoomEnemies().size(); i++) {
+            Enemy enemy = currentRoom.getRoomEnemies().get(i);
+            if (enemyName.equals(enemy.getName())) {
+                return enemy;
             }
         }
         return null;
@@ -143,35 +156,71 @@ public class Player {
 
         Item item = findItem(inventory, itemName);
 
-        if (item != null) {
+        if (item == currentWeapon){
+            currentWeapon = null;
             inventory.remove(item);
             getCurrentRoom().getItems().add(item);
             status = true;
-        } else {
+
+        } else if (item != null){
+            inventory.remove(item);
+            getCurrentRoom().getItems().add(item);
+            status = true;
+        }
+        else {
             status = false;
         }
         return status;
     }
 
     public Status equip(String item) {
-        Status status = null;
-
-
+            Status status = null;
 
             if ((findItem(getInventory(), item) == null)) {
                 status = Status.NOTFOUND;
             } else if ((!(findItem(getInventory(), item) instanceof Weapon))) {
                 status = Status.CANT;
             } else {
+
                 Weapon inventoryWeapon = (Weapon) findItem(getInventory(), item);
                 status = Status.OKAY;
-                inventoryWeapon.isEquipped();
+                if (currentWeapon != null){
+                    System.out.println("You have unequipped " + currentWeapon.getItemName()); //TODO HVIS MULIGT SÅ FIX SOUT
+                }
+                currentWeapon = inventoryWeapon;
             }
             return status;
-
-
     }
+
+    public Weapon getCurrentWeapon(){
+        return currentWeapon;
+    }
+    // Attack enemy
+
+    public boolean attackEnemy(String target, Player player) {
+
+        Enemy enemy = findEnemy(target);
+        if (enemy != null) {
+            attack(enemy, player);
+            enemy.attack(player, enemy);
+            return true;
+        }
+        return false;
+    }
+
+    public int attack(Enemy enemy, Player player){
+        return enemy.hit(currentWeapon, player);
+    }
+    // Enemy attacker
+    public int hit(Weapon weapon, Enemy enemy){
+        health -= enemy.getEnemyWeapon().getDamageRating();
+        return health;
+    }
+
 }
+
+
+
 
 
 
