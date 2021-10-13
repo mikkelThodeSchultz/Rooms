@@ -1,6 +1,6 @@
 package com.company;
 
-public abstract class Weapon extends Item{
+public abstract class Weapon extends Item {
 
     protected int damageRating;
 
@@ -11,6 +11,7 @@ public abstract class Weapon extends Item{
     }
 
     public abstract int getDamageRating();
-    }
+
+}
 
 

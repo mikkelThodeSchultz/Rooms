@@ -14,7 +14,6 @@ public class Player {
     Map map = new Map();
 
 
-
     public Player(String name) {
         inventory.add(new Item("pants", "your pants, worn and dirty", 0));
         inventory.add(new Item("shirt", "your shirt, blood sticking to the back and shoulders", 0));
@@ -22,11 +21,6 @@ public class Player {
         this.name = name;
         currentRoom = map.room1;
         map.createMap();
-
-
-
-
-
 
 
     }
@@ -47,13 +41,13 @@ public class Player {
                 getCurrentRoom().getItems().remove(roomFood);
             } else
                 health = health + inventoryFood.getHealthPoints();
-                getInventory().remove(inventoryFood);
-            }
-            if (health > 100){
-                health = 100;
-            }
-            return status;
+            getInventory().remove(inventoryFood);
         }
+        if (health > 100) {
+            health = 100;
+        }
+        return status;
+    }
 
     public Item findItem(ArrayList<Item> liste, String itemName) {
         for (int i = 0; i < liste.size(); i++) {
@@ -64,6 +58,7 @@ public class Player {
         }
         return null;
     }
+
     public Enemy findEnemy(String enemyName) {
 
         for (int i = 0; i < currentRoom.getRoomEnemies().size(); i++) {
@@ -164,46 +159,45 @@ public class Player {
 
         Item item = findItem(inventory, itemName);
 
-        if (item == currentWeapon){
+        if (item == currentWeapon) {
             currentWeapon = null;
             inventory.remove(item);
             getCurrentRoom().getItems().add(item);
             status = true;
 
-        } else if (item != null){
+        } else if (item != null) {
             inventory.remove(item);
             getCurrentRoom().getItems().add(item);
             status = true;
-        }
-        else {
+        } else {
             status = false;
         }
         return status;
     }
 
     public Status equip(String item) {
-            Status status = null;
+        Status status = null;
 
-            if ((findItem(getInventory(), item) == null)) {
-                status = Status.NOTFOUND;
-            } else if ((!(findItem(getInventory(), item) instanceof Weapon))) {
-                status = Status.CANT;
-            } else {
+        if ((findItem(getInventory(), item) == null)) {
+            status = Status.NOTFOUND;
+        } else if ((!(findItem(getInventory(), item) instanceof Weapon))) {
+            status = Status.CANT;
+        } else {
 
-                Weapon inventoryWeapon = (Weapon) findItem(getInventory(), item);
-                status = Status.OKAY;
-                if (currentWeapon != null && !Objects.equals(currentWeapon.getItemName(), "bare hands")){
-                    System.out.println("You have unequipped " + currentWeapon.getItemName()); //TODO HVIS MULIGT SÅ FIX SOUT
-                }
-                currentWeapon = inventoryWeapon;
+            Weapon inventoryWeapon = (Weapon) findItem(getInventory(), item);
+            status = Status.OKAY;
+            if (currentWeapon != null && !Objects.equals(currentWeapon.getItemName(), "bare hands")) {
+                System.out.println("You have unequipped " + currentWeapon.getItemName());
+
             }
-            return status;
+            currentWeapon = inventoryWeapon;
+        }
+        return status;
     }
 
-    public Weapon getCurrentWeapon(){
+    public Weapon getCurrentWeapon() {
         return currentWeapon;
     }
-    // Attack enemy
 
     public boolean attackEnemy(String target, Player player) {
 
@@ -216,11 +210,11 @@ public class Player {
         return false;
     }
 
-    public int attack(Enemy enemy, Player player){
+    public int attack(Enemy enemy, Player player) {
         return enemy.hit(currentWeapon, player);
     }
-    // Enemy attacker
-    public int hit(Weapon weapon, Enemy enemy){
+
+    public int hit(Weapon weapon, Enemy enemy) {
         health -= enemy.getEnemyWeapon().getDamageRating();
         return health;
     }

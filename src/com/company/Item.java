@@ -24,10 +24,4 @@ public class Item {
     public String getItemDescription() {
         return itemDescription;
     }
-
-    public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
-    }
-
-
 }

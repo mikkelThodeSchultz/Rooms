@@ -12,14 +12,14 @@ public class Game {
     public void runGame() {
         Player player = new Player("Thor");
         System.out.println("You come to your senses... " +
-                "\nYour head feels as if you have been hit with a mallet. " +
-                "\nAs your eyes adjust to the surroundings, you realize that may just be the case. " +
-                "\nYour bare feet stick to the tiled floor and whatever half-dried liquid covers it, the scent of decay is cloying. " +
-                "\nYou think that it might be a good idea to find an exit. " +
-                "\nFast." +
-                "\n(Type 'help' for a list of available commands)" +
-                "\n\nYou are currently in the Chute room. " + player.getCurrentRoom().getDescription() + ".");
-                player.getCurrentRoom().enteredRoom();
+                           "\nYour head feels as if you have been hit with a mallet. " +
+                           "\nAs your eyes adjust to the surroundings, you realize that may just be the case. " +
+                           "\nYour bare feet stick to the tiled floor and whatever half-dried liquid covers it, the scent of decay is cloying. " +
+                           "\nYou think that it might be a good idea to find an exit. " +
+                           "\nFast." +
+                           "\n(Type 'help' for a list of available commands)" +
+                           "\n\nYou are currently in the Chute room. " + player.getCurrentRoom().getDescription() + ".");
+        player.getCurrentRoom().enteredRoom();
 
         while (goAgain) {
 
@@ -46,9 +46,9 @@ public class Game {
                     }
                     break;
                 case "a", "attack":
-                    if (command.startsWith("attack")){
-                        if (player.getCurrentWeapon() instanceof ShootingWeapon){
-                            if (((ShootingWeapon) player.getCurrentWeapon()).getAmmo() <= 0){
+                    if (command.startsWith("attack")) {
+                        if (player.getCurrentWeapon() instanceof ShootingWeapon) {
+                            if (((ShootingWeapon) player.getCurrentWeapon()).getAmmo() <= 0) {
                                 System.out.println("You have no ammo left");
                                 break;
                             }
@@ -103,14 +103,12 @@ public class Game {
                     break;
                 default:
                     System.out.println("Your input was not registered. Type 'help' for a list of possible commands.");
-
             }
-            if (player.getHealth() <= 0){
+            if (player.getHealth() <= 0) {
                 System.out.println("You have died");
                 goAgain = false;
             }
         }
-
     }
 
     private void printInventory(ArrayList<Item> inventory) {
@@ -147,10 +145,11 @@ public class Game {
         String result = "You see ";
         for (int i = 0; i < enemiesRoom.size(); i++) {
 
-            if (i == enemiesRoom.size() -1){
+            if (i == enemiesRoom.size() - 1) {
                 result += enemiesRoom.get(i).getEnemyDescription() + "!";
             }
-        } if (result.equals("You see ")) {
+        }
+        if (result.equals("You see ")) {
             result = "";
         }
         System.out.println(result);
@@ -158,16 +157,16 @@ public class Game {
 
     private void helpInfo() {
         System.out.println("There is little help to be found here." +
-                "\nType 'look' to get a description of your current room. " +
-                "\nType '(n)orth', '(e)ast', '(s)outh', or '(w)est' to move in one of the cardinal directions." +
-                "\nType 'take' + the item you want to pick up." +
-                "\nType 'drop' + the item you want to drop." +
-                "\nType 'equip + the item you want to equip." +
-                "\nType 'eat' + the food you want to eat." +
-                "\nType 'attack' + the target you want to attack." +
-                "\nType 'health' to see your health points." +
-                "\nType '(i)nventory' to look at what you are carrying." +
-                "\nType '(q)uit' to quit the game.");
+                           "\nType 'look' to get a description of your current room. " +
+                           "\nType '(n)orth', '(e)ast', '(s)outh', or '(w)est' to move in one of the cardinal directions." +
+                           "\nType 'take' + the item you want to pick up." +
+                           "\nType 'drop' + the item you want to drop." +
+                           "\nType 'equip + the item you want to equip." +
+                           "\nType 'eat' + the food you want to eat." +
+                           "\nType 'attack' + the target you want to attack." +
+                           "\nType 'health' to see your health points." +
+                           "\nType '(i)nventory' to look at what you are carrying." +
+                           "\nType '(q)uit' to quit the game.");
     }
 
     private void printItems(ArrayList<Item> roomItems) {
@@ -224,32 +223,33 @@ public class Game {
         return healthStatus;
     }
 
-    public void attackSequence(Player player, String target){
+    public void attackSequence(Player player, String target) {
         Enemy enemy = player.findEnemy(target);
-        if (target.equals("")){
+        if (target.equals("")) {
             System.out.println("You attack into the air, hitting nothing.");
         }
 
-        if (player.getCurrentWeapon() == null){
+        if (player.getCurrentWeapon() == null) {
             System.out.println("You have no weapon equipped");
 
-        } else if (player.attackEnemy(target, player)){
+        } else if (player.attackEnemy(target, player)) {
             System.out.println("You attack " + target + " with " + player.getCurrentWeapon().getItemName() + " dealing "
-                    + player.getCurrentWeapon().getDamageRating() + " damage.");
+                               + player.getCurrentWeapon().getDamageRating() + " damage.");
             System.out.println("The " + enemy.getName() + " attacks you with " + enemy.getEnemyWeapon().getItemName()
-                    + " dealing "
-                    + enemy.getEnemyWeapon().getDamageRating()
-                    + " damage.");
+                               + " dealing "
+                               + enemy.getEnemyWeapon().getDamageRating()
+                               + " damage.");
 
-            if (player.getCurrentWeapon()instanceof ShootingWeapon){
+            if (player.getCurrentWeapon() instanceof ShootingWeapon) {
                 ((ShootingWeapon) player.getCurrentWeapon()).decreasingAmmo();
 
-            }if (enemy.getHealth()<= 0){
+            }
+            if (enemy.getHealth() <= 0) {
                 System.out.println("Your foe lies slain before you, well done!");
                 player.getCurrentRoom().addItem(enemy.getEnemyWeapon());
                 player.getCurrentRoom().removeEnemy(enemy);
             }
-        } else if (!target.equals("")){
+        } else if (!target.equals("")) {
             System.out.println("There is no such enemy in the room.");
         }
     }

@@ -9,12 +9,10 @@ public class Room {
     private ArrayList<Item> roomItems = new ArrayList<>();
     private ArrayList<Enemy> roomEnemies = new ArrayList<>();
     private int roomCounter;
-    private String roomHelp;
     private Room north;
     private Room east;
     private Room south;
     private Room west;
-
 
 
     public Room (String name, String description){
@@ -85,14 +83,6 @@ public class Room {
 
     public ArrayList<Item> getItems(){
         return roomItems;
-    }
-
-    //TODO: evt. bruge metoderne senere
-    public String getRoomHelp() {
-        return roomHelp;
-    }
-    public void setRoomHelp(String roomHelp) {
-        this.roomHelp = roomHelp;
     }
 
     public int getRoomCounter() {
