@@ -11,7 +11,8 @@ public class Game {
 
     public void runGame() {
         Player player = new Player("Thor");
-        System.out.println("You come to your senses... " +
+        System.out.println("Entering the realm of 'Kreepzter'" +
+                            "\nRight now you've just come to your senses... " +
                            "\nYour head feels as if you have been hit with a mallet. " +
                            "\nAs your eyes adjust to the surroundings, you realize that may just be the case. " +
                            "\nYour bare feet stick to the tiled floor and whatever half-dried liquid covers it, the scent of decay is cloying. " +

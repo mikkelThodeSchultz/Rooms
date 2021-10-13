@@ -31,10 +31,10 @@ public class Map {
         room7.addItem(new Item ("key", "a rusty key", 1));
         room8.addItem(new Item ("loafers", "a pair of comfy but filthy loafers", 0));
         room8.addItem(new Item ("tape", "a VHS tape with the first season of 'Saved by the bell'", 1));
-        room9.addItem(new Item ("grinder","A worryingly large industrial-grade meat-grinder fills the room.",99));
+        room9.addItem(new Item ("grinder","a worryingly large industrial-grade meat-grinder fills the room.",99));
 
-        room1.addItem(new Food ("burger","A big and greasy burger",3, 25));
-        room1.addItem(new Food ("rat","A dead rat",3,-25));
+        room1.addItem(new Food ("burger","a big and greasy burger",3, 25));
+        room1.addItem(new Food ("rat","a dead rat",3,-25));
         room2.addItem(new Food ("meat", "a slab of human meat", 2, 100));
         room4.addItem(new Food ("limbs", "a pile of rotting human limbs", 6, -50));
 
@@ -45,10 +45,10 @@ public class Map {
         room4.addItem(new MeleeWeapon ("femur", "a gnawed human femur", 1, 2));
         room6.addItem(new MeleeWeapon ("mallet", "a heavy mallet with some dried blood and hair on its head", 2 ,5));
 
-        room1.addItem(new ShootingWeapon("gun","a gungun",2,1,2));
+        room1.addItem(new ShootingWeapon("gun","an extremely small, black gun",2,1,2));
 
-        room2.addEnemy(new Enemy("troll", "a big and ugly troll", 20, new MeleeWeapon ("Club", "a sturdy club", 3, 20)));
-        room4.addEnemy(new Enemy("psychopath", "a baled man with a chainsaw", 35, new MeleeWeapon ("Chainsaw", "a noisy scary chainsaw", 6, 35)));
-        room6.addEnemy(new Enemy("dog", "a dog with foam drooling from its mouth", 10, new MeleeWeapon ("Collar", "a spiked collar", 1, 10)));
+        room2.addEnemy(new Enemy("troll", "a big and ugly troll with a nametag that says 'Kreepzter'...which you think is odd...", 20, new MeleeWeapon ("club", "a sturdy club", 3, 20)));
+        room4.addEnemy(new Enemy("psychopath", "a bald man with a chainsaw", 35, new MeleeWeapon ("chainsaw", "a noisy scary chainsaw", 6, 35)));
+        room6.addEnemy(new Enemy("dog", "a dog with foam drooling from its mouth", 10, new MeleeWeapon ("collar", "a spiked collar", 1, 10)));
     }
 }
