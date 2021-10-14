@@ -186,7 +186,7 @@ public class Player {
 
             Weapon inventoryWeapon = (Weapon) findItem(getInventory(), item);
             status = Status.OKAY;
-            if (currentWeapon != null && !Objects.equals(currentWeapon.getItemName(), "bare hands")) {
+            if (currentWeapon != null) {
                 System.out.println("You have unequipped " + currentWeapon.getItemName());
 
             }
